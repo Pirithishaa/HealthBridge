@@ -14,7 +14,7 @@ def extract_features_from_report(report_path):
         print(f"Error: Report file not found at '{report_path}'")
         return None, None, None
 
-    # 1. Extract the initial risk level (Low, Medium, High)
+    
     risk_level_match = re.search(r"Predicted Risk:\s*(\w+)", report_text, re.IGNORECASE)
     risk_level = risk_level_match.group(1).lower() if risk_level_match else "unknown"
 
@@ -22,7 +22,7 @@ def extract_features_from_report(report_path):
         print(f"Initial risk level is '{risk_level.capitalize()}'. No intervention analysis needed.")
         return "low", None, None
 
-    # 2. Extract the initial risk score (percentage)
+    
     risk_score_match = re.search(r"\(Probabilities:.*?\'Low\':\s*\'([\d.]+)%\'", report_text, re.IGNORECASE)
     risk_score = 100.0 - float(risk_score_match.group(1)) if risk_score_match else 50.0 # Default if not found
 
@@ -39,27 +39,26 @@ def extract_features_from_report(report_path):
     
     extracted_features = {"Overall_Risk_Before": risk_score}
     for keyword, feature_name in interventions_map.items():
-        # Check if the keyword is followed by "Needed" or "Recommended"
+     
         pattern = re.compile(rf"{keyword}.*?(Needed|Recommended)", re.IGNORECASE | re.DOTALL)
         if pattern.search(report_text):
             extracted_features[feature_name] = 1
         else:
             extracted_features[feature_name] = 0
-            
-    # Define all possible feature columns the model expects
+       
     all_feature_names = [
         'Overall_Risk_Before', 'Intervention_Nutrition', 'Intervention_Smoking',
         'Intervention_Exercise', 'Intervention_FinancialAid', 'Intervention_MentalHealth',
         'Intervention_CommunitySupport', 'Intervention_Environmental'
     ]
 
-    # Create a DataFrame with all columns, filling missing ones with 0
+    
     input_df = pd.DataFrame([extracted_features])
     for col in all_feature_names:
         if col not in input_df.columns:
             input_df[col] = 0
             
-    return risk_level, risk_score, input_df[all_feature_names] # Ensure correct column order
+    return risk_level, risk_score, input_df[all_feature_names] 
 
 def main():
     """Main execution function."""
@@ -87,7 +86,7 @@ def main():
     print("\nExtracted Features:")
     print(features_df.to_string(index=False))
 
-    # Predict the improved risk score
+
     predicted_risk_after = model.predict(features_df)[0]
     
     print("\n" + "=" * 60)
