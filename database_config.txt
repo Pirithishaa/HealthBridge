@@ -1,0 +1,9 @@
+# Database Configuration for HealthBridge
+DB_CONFIG = {
+    'host': 'localhost',
+    'user': 'health_user',
+    'password': 'Piri@2005',
+    'database': 'healthbridge',
+    'charset': 'utf8mb4',
+    'collation': 'utf8mb4_unicode_ci'
+}

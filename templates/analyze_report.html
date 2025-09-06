@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analyze Report</title>
+</head>
+<body>
+    <h2>Upload Patient Report PDF</h2>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="reportFile" accept=".pdf" required>
+        <button type="submit">Analyze</button>
+    </form>
+
+    {% if initial_risk is defined %}
+        <h3>📊 Prediction Results</h3>
+        <p><b>Initial Risk:</b> {{ initial_risk }}%</p>
+        <p><b>Predicted Risk After Interventions:</b> {{ predicted_risk_after }}%</p>
+        <p><b>Risk Reduction:</b> {{ risk_reduction }}%</p>
+
+        {% if interventions_found %}
+            <p><b>Recommended Interventions:</b></p>
+            <ul>
+                {% for item in interventions_found %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthBridge - Healthcare Solutions</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --deep-green: #1a3a32;
+      --peach: #fad6c4;
+      --warm-white: #fff7f0;
+      --soft-gray: #edebe6;
+      --highlight-orange: #ff8a42;
+      --neutral-black: #252525;
+      --gradient: linear-gradient(120deg, #1a3a32 30%, #2d5a4f 70%, #4a7c59 100%);
+      --background-white: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+    body { background: var(--warm-white); color: var(--deep-green); line-height: 1.6; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+    /* Header */
+    header {
+      background: var(--background-white);
+      box-shadow: 0 3px 24px rgba(20, 52, 42, 0.12);
+      position: sticky; top: 0; z-index: 100;
+      transition: all 0.3s ease;
+    }
+    header.scrolled { background: var(--deep-green); color: var(--peach); }
+
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; }
+    .logo { display: flex; align-items: center; }
+    .logo-icon { font-size: 32px; color: var(--highlight-orange); margin-right: 10px; }
+    .logo-text { font-size: 28px; font-weight: bold; }
+
+    .nav-links { display: flex; gap: 18px; align-items: center; }
+    .nav-links a {
+      padding: 10px 18px; border-radius: 6px;
+      color: var(--deep-green); font-weight: 500; text-decoration: none;
+      transition: 0.3s; display: flex; align-items: center; gap: 8px;
+    }
+    .nav-links a:hover { background: var(--highlight-orange); color: white; }
+
+    /* Dropdown */
+    .dropdown { position: relative; }
+    .dropdown-toggle { cursor: pointer; display: flex; align-items: center; gap: 6px; }
+    .dropdown-content {
+      display: none; position: absolute; top: 100%; left: 0;
+      background: white; min-width: 200px; box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      border-radius: 8px; z-index: 1000; padding: 10px 0;
+    }
+    .dropdown-content a {
+      display: block; padding: 12px 20px; color: var(--deep-green);
+      text-decoration: none; transition: 0.3s;
+    }
+    .dropdown-content a:hover { background: var(--peach); }
+
+    .dropdown.open .dropdown-content { display: block; }
+
+    /* Hero */
+    .hero {
+      background: var(--gradient), url("https://images.unsplash.com/photo-153293891079-1ba6ce.jpeg");
+      background-size: cover; color: var(--peach);
+      text-align: center; padding: 120px 0;
+    }
+    .hero-content { max-width: 800px; margin: 0 auto; }
+    .hero-heading { font-size: 50px; font-weight: 700; margin-bottom: 20px; }
+    .hero-subheading { font-size: 20px; opacity: 0.95; margin-bottom: 30px; }
+    .hero-buttons { margin-top: 20px; }
+    .btn {
+      padding: 14px 34px; border-radius: 8px; border: none; cursor: pointer;
+      background: var(--highlight-orange); color: white; font-weight: 600;
+      transition: 0.3s; box-shadow: 0 6px 18px rgba(255, 138, 66, 0.35);
+      text-decoration: none; display: inline-block;
+    }
+    .btn:hover { transform: scale(1.05); background: #ff7a28; }
+
+    /* Sections */
+    .section-heading { text-align: center; font-size: 36px; margin-bottom: 50px; }
+    .features, .services { padding: 80px 0; }
+    .features-grid, .services-grid {
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      justify-items: center;
+    }
+    .feature-card, .service-card {
+      background: var(--peach); 
+      border-radius: 12px;
+      padding: 32px 26px; 
+      text-align: center;
+      box-shadow: 0 10px 26px rgba(20, 52, 42, 0.12);
+      transition: 0.3s;
+      width: 100%;
+      max-width: 400px;
+    }
+    .feature-card:hover, .service-card:hover { transform: translateY(-8px); }
+
+    .feature-icon, .service-icon {
+      font-size: 48px;
+      color: var(--deep-green);
+      margin-bottom: 20px;
+    }
+
+    .feature-title, .service-title {
+      font-size: 22px;
+      margin-bottom: 15px;
+      color: var(--deep-green);
+    }
+
+    .service-list { 
+      margin-top: 20px; 
+      text-align: left;
+      list-style: none;
+    }
+    .service-list li { 
+      margin: 8px 0; 
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .service-list i {
+      color: var(--deep-green);
+    }
+
+    /* Testimonials */
+    .testimonials { padding: 80px 0; background: white; }
+    .testimonial-cards { 
+      display: flex; 
+      gap: 30px; 
+      overflow-x: auto; 
+      padding: 10px 0;
+      justify-content: center;
+    }
+    .testimonial-card {
+      flex: 0 0 350px; 
+      background: var(--warm-white); 
+      border-radius: 14px;
+      padding: 30px; 
+      box-shadow: 0 8px 24px rgba(20, 52, 42, 0.12);
+      transition: 0.3s;
+      text-align: center;
+    }
+    .testimonial-card:hover { transform: scale(1.05); }
+
+    .testimonial-text { font-style: italic; margin-bottom: 20px; font-size: 16px; line-height: 1.6; }
+
+    .author { display: flex; align-items: center; gap: 15px; justify-content: center; }
+    .author-avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--deep-green); color: white;
+      display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .author-info { text-align: left; }
+    .author-name { font-weight: bold; display: block; }
+    .author-role { color: #666; font-size: 14px; }
+
+    /* CTA */
+    .cta { background: var(--deep-green); color: var(--peach); padding: 80px 0; text-align: center; }
+    .cta h2 { font-size: 36px; margin-bottom: 20px; }
+    .btn-outline { border: 2px solid var(--peach); background: transparent; color: var(--peach); }
+    .btn-outline:hover { background: var(--peach); color: var(--deep-green); transform: scale(1.05); }
+
+    /* Footer */
+    footer { background: var(--neutral-black); color: var(--peach); padding: 60px 0 20px 0; }
+    .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+    .footer-content h3 { margin-bottom: 20px; font-size: 20px; }
+    .footer-content ul { list-style: none; }
+    .footer-content ul li { margin-bottom: 10px; }
+    .footer-content ul li a { color: var(--peach); text-decoration: none; transition: 0.3s; }
+    .footer-content ul li a:hover { color: var(--highlight-orange); }
+    .social-icons { display: flex; gap: 15px; margin-top: 20px; }
+    .social-icons a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: var(--deep-green); color: var(--peach); transition: 0.3s; }
+    .social-icons a:hover { background: var(--highlight-orange); }
+    .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid #444; color: #aaa; }
+
+    /* Chatbot positioning */
+    .chatbot-fixed { position: fixed; bottom: 20px; right: 20px; z-index: 9999; border-radius: 20px; overflow: hidden; pointer-events: auto; }
+    .chatbot-iframe { border: none; width: 420px; height: 600px; border-radius: 20px; pointer-events: auto; }
+    @media (max-width: 480px) { .chatbot-iframe { width: 300px; height: 500px; } }
+    .dropdown-content {
+  z-index: 10000; /* higher than iframe */
+  position: absolute;
+}
+.chatbot-iframe {
+  pointer-events: none;  /* stops it from blocking clicks */
+}
+
+.chatbot-fixed:hover .chatbot-iframe {
+  pointer-events: auto;  /* re-enable only when user interacts */
+}
+
+
+  </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="container">
+      <nav role="navigation" aria-label="Main Navigation">
+        <div class="logo" aria-label="Company Logo" role="banner">
+          <i class="fas fa-heartbeat logo-icon" aria-hidden="true"></i>
+          <div class="logo-text">HealthBridge</div>
+        </div>
+
+        <div class="nav-links" id="primary-navigation">
+          <a href="#" class="active"><i class="fas fa-home"></i><span>Home</span></a>
+          <a href="#features"><i class="fas fa-info-circle"></i><span>About</span></a>
+          <a href="#services"><i class="fas fa-cogs"></i><span>Solutions</span></a>
+
+          <!-- Login Dropdown -->
+          <div class="dropdown">
+            <div class="dropdown-toggle"><i class="fas fa-user"></i><span>Login</span><i class="fas fa-caret-down"></i></div>
+            <div class="dropdown-content">
+              <a href="/provider/login">Medical Providers</a>
+              <a href="/ngo/login">NGO</a>
+            </div>
+          </div>
+
+          <!-- Signup Dropdown -->
+          <div class="dropdown">
+            <div class="dropdown-toggle"><i class="fas fa-user-plus"></i><span>SignUp</span><i class="fas fa-caret-down"></i></div>
+            <div class="dropdown-content">
+              <a href="/provider/signup">Medical Providers</a>
+              <a href="/ngo/signup">NGO</a>
+            </div>
+          </div>
+
+          <a href="#contact"><i class="fas fa-envelope"></i><span>Contact</span></a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" role="banner" aria-label="Main Banner">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-heading">Transforming Healthcare Through Innovation</h1>
+        <p class="hero-subheading">HealthBridge connects Medical Providers and NGOs with cutting-edge solutions that improve health outcomes and reduce costs.</p>
+        <div class="hero-buttons">
+          <a href="learn more.html" class="btn">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" class="features">
+    <div class="container">
+      <h2 class="section-heading">About Us</h2>
+      <div class="features-grid">
+        <article class="feature-card">
+          <div class="feature-icon"><i class="fas fa-user-md"></i></div>
+          <h3 class="feature-title">For Medical Providers</h3>
+          <p class="feature-description">Streamlined patient management, EHR, and clinical decision support.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+          <h3 class="feature-title">For NGOs</h3>
+          <p class="feature-description">Community resource navigation and support services for NGOs.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+          <h3 class="feature-title">Advanced Analytics</h3>
+          <p class="feature-description">Data insights to drive better healthcare decisions and efficiency.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="services">
+    <div class="container">
+      <h2 class="section-heading">We're Providing Best Solutions</h2>
+      <div class="services-grid">
+        <article class="service-card">
+          <div class="service-icon"><i class="fas fa-heartbeat"></i></div>
+          <h3 class="service-title">Provider Solutions</h3>
+          <p class="service-description">Comprehensive tools to enhance patient care delivery.</p>
+          <ul class="service-list">
+            <li><i class="fas fa-check"></i> Electronic Health Records</li>
+            <li><i class="fas fa-check"></i> Patient Management Systems</li>
+            <li><i class="fas fa-check"></i> Clinical Decision Support</li>
+          </ul>
+        </article>
+        <article class="service-card">
+          <div class="service-icon"><i class="fas fa-user-nurse"></i></div>
+          <h3 class="service-title">NGO Solutions</h3>
+          <p class="service-description">Empowering NGOs with advocacy and education programs.</p>
+          <ul class="service-list">
+            <li><i class="fas fa-check"></i> Community Resource Navigation</li>
+            <li><i class="fas fa-check"></i> Personalized Support</li>
+            <li><i class="fas fa-check"></i> Health Equity Programs</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="container">
+      <h2 class="section-heading">What Our Clients Say</h2>
+      <div class="testimonial-cards">
+        <article class="testimonial-card">
+          <p class="testimonial-text">"HealthBridge improved our workflow efficiency and patient care!"</p>
+          <div class="author"><div class="author-avatar">JD</div><div class="author-info"><span class="author-name">Dr. Jennifer Davis</span><span class="author-role">Chief Medical Officer</span></div></div>
+        </article>
+        <article class="testimonial-card">
+          <p class="testimonial-text">"We can now reach more families in need, thanks to HealthBridge."</p>
+          <div class="author"><div class="author-avatar">MG</div><div class="author-info"><span class="author-name">Ms. Michael Grant</span><span class="author-role">Volunteer</span></div></div>
+        </article>
+        <article class="testimonial-card">
+          <p class="testimonial-text">"Integration between provider and NGO has never been smoother."</p>
+          <div class="author"><div class="author-avatar">AL</div><div class="author-info"><span class="author-name">Dr. Anna Lee</span><span class="author-role">Health Director</span></div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container">
+      <h2>Ready to Transform Healthcare?</h2>
+      <p style="max-width:650px;margin:1em auto 2em auto;">Join thousands of providers and NGOs benefiting from HealthBridge's innovative solutions.</p>
+      <a href="/provider/signup" class="btn btn-outline">Get Started</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <section>
+          <h3>HealthBridge</h3>
+          <p>Connecting Providers & NGOs through innovative technology.</p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </section>
+        <section>
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#features">About</a></li>
+            <li><a href="#services">Solutions</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </section>
+        <section>
+          <h3>Services</h3>
+          <ul>
+            <li><a href="#">Provider Solutions</a></li>
+            <li><a href="#">NGO Solutions</a></li>
+          </ul>
+        </section>
+        <section id="contact">
+          <h3>Contact</h3>
+          <address>
+            <p><i class="fas fa-map-marker-alt"></i> 123 Healthcare Ave, CA 94301</p>
+            <p><i class="fas fa-phone"></i> (555) 123-4567</p>
+            <p><i class="fas fa-envelope"></i> info@healthbridge.com</p>
+          </address>
+        </section>
+      </div>
+      <div class="footer-bottom">© 2025 HealthBridge. All Rights Reserved.</div>
+    </div>
+  </footer>
+
+  <!-- CHATBOT -->
+  <div class="chatbot-fixed">
+   <iframe src="/chatbot" class="chatbot-iframe"></iframe>
+  </div>
+
+  <!-- JS -->
+  <script>
+    
+  // Handle dropdown toggle (Login / Signup)
+  document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+      // Only block default when clicking on the toggle, not the links
+      if (e.target.tagName !== 'A') {
+        e.preventDefault();
+      }
+      const parent = toggle.parentElement;
+      parent.classList.toggle('open');
+
+      // Close all other dropdowns
+      document.querySelectorAll('.dropdown').forEach(d => {
+        if (d !== parent) d.classList.remove('open');
+      });
+    });
+  });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.dropdown')) {
+      document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
+    }
+  });
+</script>
+
+</body>
+</html>

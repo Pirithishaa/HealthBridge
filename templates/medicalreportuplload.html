@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Upload Report - HealthBridge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        :root {
+            --deep-green: #1a3a32;
+            --peach: #fad6c4;
+            --warm-white: #fff7f0;
+            --soft-gray: #edebe6;
+            --highlight-orange: #ff8a42;
+            --neutral-black: #252525;
+            --gradient: linear-gradient(120deg, #1a3a32 30%, #2d5a4f 70%, #4a7c59 100%);
+            --gradient-alt: linear-gradient(135deg, #ff8a42 0%, #ff6b1a 100%);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-light: 0 8px 32px rgba(31, 38, 135, 0.37);
+            --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.1);
+            --background-white: #ffffff;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Inter', 'Segoe UI', sans-serif; 
+        }
+
+        body { 
+            background: linear-gradient(135deg, var(--warm-white) 0%, #f8f4f0 50%, var(--soft-gray) 100%);
+            color: var(--deep-green); 
+            line-height: 1.6; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 138, 66, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(26, 58, 50, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(250, 214, 196, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+            animation: particleFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(1deg); }
+            66% { transform: translateY(10px) rotate(-1deg); }
+        }
+
+        /* Container for consistent max-width and centering */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Enhanced Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 20px 0; 
+        }
+
+        .logo { 
+            display: flex; 
+            align-items: center; 
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.02);
+        }
+
+        .logo-icon { 
+            font-size: 36px; 
+            color: var(--highlight-orange); 
+            margin-right: 12px;
+            filter: drop-shadow(0 2px 4px rgba(255, 138, 66, 0.3));
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .logo-text { 
+            font-size: 32px; 
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links { 
+            display: flex; 
+            gap: 8px; 
+            align-items: center; 
+        }
+
+        .nav-links a {
+            padding: 12px 20px; 
+            border-radius: 12px;
+            color: var(--deep-green); 
+            font-weight: 600; 
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-alt);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-links a:hover::before {
+            left: 0;
+        }
+
+        .nav-links a:hover { 
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 138, 66, 0.4);
+        }
+
+        /* Back button styling */
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            z-index: 1001;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 12px 20px;
+            border-radius: 50px;
+            color: var(--deep-green);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-light);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 138, 66, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(255, 138, 66, 0.3);
+            color: var(--highlight-orange);
+        }
+
+        /* Hero-style welcome section */
+        .welcome-section {
+            background: var(--gradient);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: var(--peach);
+            text-align: center;
+            padding: 100px 0;
+            margin-bottom: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100"><path d="M0,0v100c166.7,0,166.7-100,333.3-100s166.7,100,333.3,100s166.7-100,333.3-100v-100z" fill="rgba(255,255,255,0.1)"/></svg>') repeat-x;
+            background-size: 1000px 100px;
+            animation: wave 20s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-1000px); }
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-section h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: titleSlideIn 1s ease-out;
+        }
+
+        .welcome-section .subtitle {
+            font-size: 1.5rem;
+            font-weight: 600;
+            opacity: 0.95;
+            animation: subtitleSlideIn 1s ease-out 0.3s both;
+        }
+
+        @keyframes titleSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes subtitleSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 0.95;
+                transform: translateY(0);
+            }
+        }
+
+        /* Enhanced main content */
+        main {
+            flex: 1;
+            position: relative;
+        }
+
+        /* Glassmorphism upload section */
+        .upload-section {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 700px;
+            margin: -60px auto 80px auto;
+            position: relative;
+            z-index: 10;
+            user-select: none;
+        }
+
+        .upload-section:hover {
+            transform: translateY(-10px);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .upload-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            border-radius: 24px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .upload-section:hover::before {
+            opacity: 1;
+        }
+
+        .upload-section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+            position: relative;
+        }
+
+        .upload-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--gradient-alt);
+            border-radius: 2px;
+        }
+
+        /* Enhanced file upload area */
+        .file-upload-area { 
+            border: 3px dashed rgba(255, 255, 255, 0.4);
+            border-radius: 20px; 
+            padding: 3rem 2rem; 
+            margin-bottom: 2rem; 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            cursor: pointer; 
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-upload-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 138, 66, 0.1) 50%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .file-upload-area:hover::before, .file-upload-area.drag-over::before {
+            opacity: 1;
+        }
+
+        .file-upload-area:hover, .file-upload-area.drag-over { 
+            border-color: var(--highlight-orange); 
+            background: rgba(255, 138, 66, 0.1);
+            transform: translateY(-5px); 
+            box-shadow: 0 15px 35px rgba(255, 138, 66, 0.3);
+        }
+
+        .file-upload-area .upload-icon { 
+            font-size: 4rem; 
+            color: var(--highlight-orange); 
+            margin-bottom: 1.5rem; 
+            display: block; 
+            animation: bounce 2s infinite;
+            filter: drop-shadow(0 4px 8px rgba(255, 138, 66, 0.3));
+        }
+
+        @keyframes bounce { 
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 
+            40% { transform: translateY(-15px); } 
+            60% { transform: translateY(-8px); } 
+        }
+
+        .file-upload-area h3 { 
+            color: var(--deep-green); 
+            font-size: 1.5rem; 
+            margin-bottom: 0.8rem; 
+            font-weight: 700; 
+        }
+
+        .file-upload-area p { 
+            color: rgba(26, 58, 50, 0.8); 
+            font-size: 1.1rem; 
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .file-upload-area .supported-formats { 
+            font-size: 1rem; 
+            color: var(--highlight-orange); 
+            font-weight: 600; 
+            margin-top: 1rem; 
+            padding: 12px 20px;
+            background: rgba(255, 138, 66, 0.1);
+            border-radius: 25px;
+            display: inline-block;
+        }
+
+        #fileInput { display: none; }
+
+        /* Enhanced selected file display */
+        .selected-file { 
+            background: rgba(250, 214, 196, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 138, 66, 0.3);
+            border-radius: 16px; 
+            padding: 1.5rem; 
+            margin-bottom: 2rem; 
+            display: none; 
+            animation: slideIn 0.5s ease;
+            box-shadow: 0 8px 25px rgba(255, 138, 66, 0.2);
+        }
+
+        .selected-file.show { display: block; }
+
+        .selected-file .file-info { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 1rem; 
+        }
+
+        .selected-file .file-icon { 
+            font-size: 2rem; 
+            color: var(--deep-green); 
+        }
+
+        .selected-file .file-name { 
+            color: var(--deep-green); 
+            font-weight: 700; 
+            font-size: 1.1rem; 
+        }
+
+        .selected-file .remove-file { 
+            background: var(--deep-green); 
+            border: none; 
+            color: white; 
+            cursor: pointer; 
+            font-size: 1.2rem; 
+            margin-left: 1rem; 
+            padding: 8px; 
+            border-radius: 50%; 
+            transition: all 0.3s ease; 
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .selected-file .remove-file:hover { 
+            background: var(--highlight-orange); 
+            transform: scale(1.1);
+        }
+
+        /* Enhanced button styling */
+        .upload-btn {
+            padding: 18px 40px;
+            border-radius: 16px;
+            border: none;
+            cursor: pointer;
+            background: var(--gradient-alt);
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 8px 25px rgba(255, 138, 66, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+            margin-bottom: 2rem;
+        }
+
+        .upload-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .upload-btn:hover::before {
+            left: 100%;
+        }
+
+        .upload-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 15px 35px rgba(255, 138, 66, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .upload-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .upload-btn:disabled {
+            background: var(--soft-gray);
+            color: rgba(26, 58, 50, 0.6);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Enhanced progress bar */
+        .progress-container { 
+            width: 100%; 
+            background: rgba(255, 255, 255, 0.3); 
+            border-radius: 25px; 
+            overflow: hidden; 
+            margin-bottom: 1.5rem; 
+            display: none; 
+            height: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .progress-container.show { display: block; }
+
+        .progress-bar { 
+            height: 100%; 
+            background: var(--gradient-alt); 
+            width: 0%; 
+            transition: width 0.3s ease; 
+            border-radius: 25px;
+            box-shadow: 0 2px 8px rgba(255, 138, 66, 0.4);
+        }
+
+        /* Enhanced status messages */
+        .status-message { 
+            padding: 1.5rem; 
+            border-radius: 16px; 
+            margin-bottom: 1.5rem; 
+            font-weight: 600; 
+            display: none; 
+            animation: slideIn 0.5s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 1.1rem;
+        }
+
+        .status-message.show { display: block; }
+
+        .status-message.success { 
+            background: rgba(212, 237, 218, 0.9); 
+            color: #155724; 
+            border-color: rgba(195, 230, 203, 0.8);
+            box-shadow: 0 8px 25px rgba(21, 87, 36, 0.2);
+        }
+
+        .status-message.error { 
+            background: rgba(248, 215, 218, 0.9); 
+            color: #721c24; 
+            border-color: rgba(245, 198, 203, 0.8);
+            box-shadow: 0 8px 25px rgba(114, 28, 36, 0.2);
+        }
+
+        .status-message.uploading { 
+            background: rgba(250, 214, 196, 0.9); 
+            color: var(--deep-green); 
+            border-color: rgba(255, 138, 66, 0.3);
+            box-shadow: 0 8px 25px rgba(255, 138, 66, 0.2);
+        }
+
+        /* Enhanced result box */
+        #resultBox { 
+            margin-top: 2rem; 
+            padding: 2rem; 
+            border-radius: 20px; 
+            display: none; 
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            user-select: text;
+            animation: resultSlideIn 0.6s ease-out;
+        }
+
+        @keyframes resultSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #resultBox h3 { 
+            color: var(--deep-green); 
+            margin-bottom: 1rem; 
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        #resultText { 
+            font-size: 1.2rem; 
+            color: var(--neutral-black);
+            line-height: 1.8;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            border-left: 4px solid var(--highlight-orange);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating elements */
+        .floating-icon {
+            position: absolute;
+            color: var(--highlight-orange);
+            opacity: 0.1;
+            font-size: 6rem;
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-icon:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-icon:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-icon:nth-child(3) {
+            bottom: 20%;
+            left: 15%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .welcome-section h1 {
+                font-size: 2.5rem;
+            }
+            
+            .welcome-section .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .upload-section {
+                margin: -40px 20px 60px 20px;
+                padding: 30px 25px;
+            }
+            
+            .upload-section h2 {
+                font-size: 2rem;
+            }
+            
+            .back-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 20px;
+                align-self: flex-start;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .welcome-section {
+                padding: 80px 0;
+            }
+            
+            .floating-icon {
+                display: none;
+            }
+
+            .file-upload-area {
+                padding: 2rem 1rem;
+            }
+
+            .file-upload-area .upload-icon {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Floating background icons -->
+    <div class="floating-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+    <div class="floating-icon"><i class="fas fa-file-medical"></i></div>
+    <div class="floating-icon"><i class="fas fa-shield-alt"></i></div>
+
+    <header>
+        <div class="container">
+            <nav role="navigation" aria-label="Main Navigation">
+                <div class="logo" aria-label="Company Logo" role="banner">
+                    <i class="fas fa-heartbeat logo-icon" aria-hidden="true"></i>
+                    <div class="logo-text">HealthBridge</div>
+                </div>
+
+                <div class="nav-links">
+                    <a href="medicalreportuplload.html"><i class="fas fa-arrow-left"></i><span>Back to Dashboard</span></a>
+                    <a href="landingPage.html"><i class="fas fa-home"></i><span>Home</span></a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="welcome-section" aria-live="polite">
+        <div class="container">
+            <div class="welcome-content">
+                <h1>Upload Medical Report</h1>
+                <p class="subtitle" aria-atomic="true" aria-live="assertive">Securely upload your medical documents for AI analysis</p>
+            </div>
+        </div>
+    </section>
+
+    <main role="main">
+        <div class="container">
+            <section class="upload-section" aria-label="Upload medical report">
+                <h2>Secure Document Upload</h2>
+                
+                <form id="uploadForm" aria-describedby="uploadInstructions">
+                    <div id="uploadInstructions" class="sr-only">
+                        Upload your medical report for secure analysis. Supported formats include PDF, DOC, and DOCX files up to 10MB.
+                    </div>
+                    
+                    <div class="file-upload-area" onclick="document.getElementById('fileInput').click()" role="button" tabindex="0" aria-label="Click to select file or drag and drop">
+                        <i class="fas fa-cloud-upload-alt upload-icon" aria-hidden="true"></i>
+                        <h3>Drop your file here or click to browse</h3>
+                        <p>Upload your medical report for secure storage and analysis</p>
+                        <div class="supported-formats">
+                            Supported formats: PDF, DOC, DOCX (Max 10MB)
+                        </div>
+                    </div>
+
+                    <input type="file" id="fileInput" name="reportFile" accept=".pdf,.doc,.docx" />
+
+                    <div class="selected-file" id="selectedFile">
+                        <div class="file-info">
+                            <i class="fas fa-file-alt file-icon" aria-hidden="true"></i>
+                            <span class="file-name" id="fileName"></span>
+                            <button type="button" class="remove-file" onclick="removeFile()" aria-label="Remove selected file">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="upload-btn" id="uploadBtn" disabled aria-live="polite">
+                        <i class="fas fa-upload"></i> Upload & Analyze Report
+                    </button>
+
+                    <div class="progress-container" id="progressContainer">
+                        <div class="progress-bar" id="progressBar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+                    <div class="status-message" id="statusMessage" role="alert" aria-live="assertive"></div>
+                </form>
+
+                <!-- Prediction Result Box -->
+                <div id="resultBox" role="alert" aria-live="assertive">
+                    <h3>Analysis Results</h3>
+                    <div id="resultText"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+    // DOM element references
+    const fileInput = document.getElementById('fileInput');
+    const selectedFile = document.getElementById('selectedFile');
+    const fileName = document.getElementById('fileName');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const statusMessage = document.getElementById('statusMessage');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    const resultBox = document.getElementById('resultBox');
+    const resultText = document.getElementById('resultText');
+
+    // Show selected file
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            fileName.textContent = file.name;
+            selectedFile.classList.add('show');
+            uploadBtn.disabled = false;
+        }
+    });
+
+    // Remove file
+    function removeFile() {
+        fileInput.value = '';
+        selectedFile.classList.remove('show');
+        uploadBtn.disabled = true;
+        resultBox.style.display = 'none';
+        statusMessage.classList.remove('show', 'success', 'error', 'uploading');
+    }
+
+    // Handle form submission (fake upload)
+    document.getElementById('uploadForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!fileInput.files.length) return;
+
+        // Reset UI
+        progressBar.style.width = '0%';
+        progressContainer.classList.add('show');
+        statusMessage.textContent = 'Uploading file...';
+        statusMessage.className = 'status-message show uploading';
+        resultBox.style.display = 'none';
+
+        // Fake upload progress
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 10;
+            progressBar.style.width = progress + '%';
+            progressBar.setAttribute('aria-valuenow', progress);
+
+            if (progress >= 100) {
+                clearInterval(interval);
+
+                // Show success
+                statusMessage.textContent = 'File uploaded successfully!';
+                statusMessage.className = 'status-message show success';
+
+                // Show analysis result
+                setTimeout(() => {
+                    resultBox.style.display = 'block';
+                    resultText.textContent = "Initial Risk: 78.9%\n\nAI Analysis Summary:\nThe uploaded medical report indicates that the patient's vital signs are a bit in the higher range. No immediate health risks were identified. Regular monitoring is recommended to maintain optimal health.\n\nRisk after Interventions:32.51%";
+                }, 800);
+            }
+        }, 300);
+    });
+
+    // Enable drag & drop
+    const fileUploadArea = document.querySelector('.file-upload-area');
+    fileUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.add('drag-over');
+    });
+    fileUploadArea.addEventListener('dragleave', () => {
+        fileUploadArea.classList.remove('drag-over');
+    });
+    fileUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.remove('drag-over');
+        if (e.dataTransfer.files.length > 0) {
+            fileInput.files = e.dataTransfer.files;
+            fileInput.dispatchEvent(new Event('change'));
+        }
+    });
+</script>

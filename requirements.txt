@@ -1,0 +1,11 @@
+flask
+pandas
+joblib
+reportlab
+PyPDF2
+dash
+plotly
+flask-mysqldb
+flask-session
+werkzeug
+bcrypt
