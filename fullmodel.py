@@ -351,9 +351,9 @@ def _safe_tree_shap(estimator, X_proc, pred_label=None, background_proc=None):
             sv = sv[0]
         return sv
     except Exception:
-        # Fallback: KernelExplainer on the estimator's predict_proba with processed background
+       
         if background_proc is None:
-            # if no background, use the single point repeated
+        
             background_proc = np.repeat(X_proc, repeats=20, axis=0)
         f = lambda x: estimator.predict_proba(x)
         kexpl = shap.KernelExplainer(f, background_proc)
@@ -379,9 +379,7 @@ def explain_meta_prediction(new_clinical: pd.DataFrame,
       new_social:   1-row DataFrame with columns == social_features
     """
 
-    # -------------------
-    # 1) Base model predictions (pipelines take raw DataFrames)
-    # -------------------
+   
     proba_c = clinical_clf.predict_proba(new_clinical)[0]
     proba_s = social_clf.predict_proba(new_social)[0]
 
@@ -392,9 +390,7 @@ def explain_meta_prediction(new_clinical: pd.DataFrame,
     final_pred  = meta_clf.predict(meta_input)[0]
     final_proba = meta_clf.predict_proba(meta_input)[0]
 
-    # -------------------
-    # 2) Meta-model SHAP (multiclass GradientBoosting -> KernelExplainer)
-    # -------------------
+   
     try:
         bg_n = min(50, len(df))
         bg_idx = df.sample(n=bg_n, random_state=42).index
@@ -421,9 +417,7 @@ def explain_meta_prediction(new_clinical: pd.DataFrame,
         reverse=True
     )
 
-    # -------------------
-    # 3) Clinical SHAP
-    # -------------------
+    
     clf_c = clinical_clf.named_steps["model"]
     pre_c = clinical_clf.named_steps["preprocess"]
     Xc_proc = pre_c.transform(new_clinical)
@@ -443,9 +437,7 @@ def explain_meta_prediction(new_clinical: pd.DataFrame,
         reverse=True
     )
 
-    # -------------------
-    # 4) Social SHAP
-    # -------------------
+
     clf_s = social_clf.named_steps["model"]
     pre_s = social_clf.named_steps["preprocess"]
     Xs_proc = pre_s.transform(new_social)
@@ -465,9 +457,7 @@ def explain_meta_prediction(new_clinical: pd.DataFrame,
         reverse=True
     )
 
-    # -------------------
-    # 5) Text report
-    # -------------------
+    
     lines = [
         f"--- Meta Risk Report for Patient {patient_id} ---",
         f"FIPS Code: {patient_fips}",
@@ -490,16 +480,6 @@ def explain_meta_prediction(new_clinical: pd.DataFrame,
     return "\n".join(lines)
 
 
-# ----------------------------
-# Define features (exclude Patient_ID, FIPS)
-# ----------------------------
-# ----------------------------
-# Define clinical & social features
-# ----------------------------
-
-# ----------------------------
-# Define features (exclude Patient_ID, FIPS)
-# ----------------------------
 clinical_features = [
     "Age","BMI","BP_Systolic","BP_Diastolic","Cholesterol",
     "Diabetes","Hypertension","Heart_Disease","Asthma",
@@ -514,22 +494,18 @@ social_features = [
     "lasnap1","lasnap10","FIPS","Healthcare_Visits_Last_Year"
 ]
 
-# ----------------------------
-# Pick one patient row
-# ----------------------------
+
 patient_row = df.loc[0]  # single row (Series)
 
-# Convert to 1-row DataFrames (only features)
+
 patient_clinical = patient_row[clinical_features].to_frame().T
 patient_social   = patient_row[social_features].to_frame().T
 
-# Metadata only (not used in model training)
+
 patient_id       = patient_row["Patient_ID"]
 patient_fips     = patient_row["FIPS"]
 
-# ----------------------------
-# Run explanation
-# ----------------------------
+
 report = explain_meta_prediction(
     new_clinical=patient_clinical,
     new_social=patient_social,
@@ -542,13 +518,12 @@ import re
 import requests
 import google.generativeai as genai
 
-# 🔑 Configure Gemini API key
+
 genai.configure(api_key="AIzaSyCo91wCZG1RE4ldx7wK6beiIx0enAHkF8k")
 
 
-# ---------------------------
-# 1. Extract FIPS from report
-# ---------------------------
+
+
 def extract_fips_from_report(report_text):
     """
     Look for a line like 'FIPS Code: XXXXX'
@@ -559,9 +534,6 @@ def extract_fips_from_report(report_text):
     raise ValueError("No FIPS code found in SHAP report")
 
 
-# ---------------------------
-# 2. FIPS -> Lat/Lon
-# ---------------------------
 def fips_to_latlon(fips_code):
     if len(fips_code) > 5:
         fips_code = fips_code[:5]
@@ -596,7 +568,6 @@ def fips_to_latlon(fips_code):
     except Exception:
         pass
 
-    # State-level fallback
     state_fallback = {
         "01": (32.8, -86.6),   # Alabama
         "05": (34.8, -92.2),   # Arkansas
@@ -611,9 +582,7 @@ def fips_to_latlon(fips_code):
     raise RuntimeError(f"Could not resolve lat/lon for FIPS {fips_code}")
 
 
-# ---------------------------
-# 3. Nearby resources
-# ---------------------------
+
 def get_nearby_resources(lat, lon, radius_km=20):
     query = f"""
         [out:json];
@@ -655,13 +624,11 @@ def extract_fips_and_risk(report_text):
             except Exception:
                 final_probs = {}
 
-    # Convert floats to percentages
+  
     if final_probs:
         final_probs = {k: round(float(v) * 100, 2) for k, v in final_probs.items()}
 
     return fips_code, final_pred, final_probs
 
 
-# -----------------------------
-# Patient Report Generator
-# -----------------------------
+
