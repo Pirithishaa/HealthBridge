@@ -1,10 +1,10 @@
-# ngo_dashboard.py  (fixed)
+
 from dash import Dash, html, dcc, Input, Output, State, callback_context
 import traceback
 import sys
 import importlib
 
-# data helpers used by callbacks
+
 from data import df, make_map
 
 external_stylesheets = [
@@ -17,7 +17,7 @@ def register_dash(flask_app):
     Create and mount Dash app on the provided Flask app.
     Mount path: /ngo/dashboard/
     """
-    # 1) Create the Dash app FIRST so module-level @callback in pages bind correctly
+
     ngo_dash = Dash(
         __name__,
         server=flask_app,
@@ -26,13 +26,13 @@ def register_dash(flask_app):
         suppress_callback_exceptions=True,
     )
 
-    # 2) Import page modules AFTER app exists (critical for callbacks to register)
+
     try:
         dashboard = importlib.import_module("pages.dashboard")
         charts = importlib.import_module("pages.charts")
         interventions = importlib.import_module("pages.interventions")
     except Exception:
-        # Helpful trace in the UI if a page import fails
+      
         tb = traceback.format_exc()
         print("Error importing page modules:\n", tb, file=sys.stderr)
 
@@ -65,7 +65,7 @@ def register_dash(flask_app):
 
         dashboard = charts = interventions = _Fallback()
 
-    # 3) App shell (sidebar + placeholder for pages)
+
     ngo_dash.layout = html.Div(
         [
             dcc.Location(id="url"),
@@ -105,7 +105,7 @@ def register_dash(flask_app):
                         **{"data-tooltip": "Suggested Interventions"},
                     ),
 
-                    # CSV Download (visible on all pages)
+             
                     html.Div(
                         [
                             html.Button(
@@ -131,7 +131,6 @@ def register_dash(flask_app):
         ]
     )
 
-    # ----------- Routing / Page rendering -----------
     @ngo_dash.callback(Output("page-content", "children"), Input("url", "pathname"))
     def render_page(pathname):
         try:
@@ -178,7 +177,7 @@ def register_dash(flask_app):
                 },
             )
 
-    # ----------- Sidebar collapse -----------
+
     @ngo_dash.callback(
         Output("sidebar", "className"),
         Output("page-content", "className"),
@@ -192,7 +191,7 @@ def register_dash(flask_app):
             collapsed = not collapsed
         return ("sidebar collapsed", "content collapsed") if collapsed else ("sidebar", "content")
 
-    # ----------- Highlight active menu -----------
+   
     @ngo_dash.callback(
         Output("link-dashboard", "className"),
         Output("link-charts", "className"),
@@ -213,8 +212,8 @@ def register_dash(flask_app):
             c = base + " active"
         return a, b, c
 
-    # ----------- Map zoom callback -----------
-    @ngo_dash.callback(
+
+    @ngo_dash.callback(---
         Output("risk-map", "figure"),
         Output("dd-state", "value"),
         Input("bar-state-small", "clickData"),
@@ -224,11 +223,11 @@ def register_dash(flask_app):
     )
     def zoom_to_state(bar_click, dd_value, n_reset):
         ctx = callback_context
-        # Reset → full map
+    
         if ctx.triggered and ctx.triggered[0]["prop_id"].startswith("btn-reset"):
             return make_map(df), None
 
-        # Derive selected state
+
         state = dd_value
         if not state and bar_click and "points" in bar_click and bar_click["points"]:
             state = bar_click["points"][0].get("x")
@@ -244,27 +243,23 @@ def register_dash(flask_app):
         fig = make_map(dff, zoom=5.5, center=center)
         return fig, state
 
-    # ----------- CSV Download -----------
     @ngo_dash.callback(
         Output("download-data", "data"),
         Input("btn-download", "n_clicks"),
         prevent_initial_call=True,
     )
     def download_csv(n_clicks):
-        # If you later add filters in dcc.Store, read them here and filter df
+  
         return dcc.send_data_frame(df.to_csv, "ngo_8states_clean.csv", index=False)
 
-    # ----------- Intervention details -----------
-    # Expects components in interventions.layout:
-    #   dcc.Dropdown(id="intervention-dropdown")
-    #   html.Div(id="intervention-details")
+   
     @ngo_dash.callback(
         Output("intervention-details", "children"),
         Input("intervention-dropdown", "value"),
         prevent_initial_call=False,
     )
     def show_intervention_details(selected):
-        # Works whether the column is named "Intervention" or "intervention"
+        
         if not selected:
             return "Select an intervention to view details."
         col = "Intervention" if "Intervention" in df.columns else ("intervention" if "intervention" in df.columns else None)
@@ -275,7 +270,7 @@ def register_dash(flask_app):
             return html.Div("No details available for the selected intervention.")
 
         row = rows.iloc[0].to_dict()
-        # Pick some optional keys if they exist
+ 
         def val(k, default="—"):
             return row.get(k, default)
 
