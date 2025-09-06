@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthBridge - Medical Provider Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --deep-green: #143A2E;
+      --peach: #FAD4C4;
+      --warm-white: #FFF7F0;
+      --soft-gray: #EDEBE6;
+      --highlight-orange: #FF8A42;
+      --black: #252525;
+      --gradient: linear-gradient(135deg, #143A2E 40%, #143A2E 95%);
+    }
+
+    *, *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, rgba(20,58,34,0.9), rgba(20, 58, 34, 0.9));
+      min-height: 100vh;
+      color: var(--deep-green);
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: rgba(255 255 255 / 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255 255 255 / 0.2);
+      padding: 1rem 3rem;
+      box-shadow: 0 4px 20px rgba(0 0 0 / 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      user-select: none;
+    }
+
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: var(--deep-green);
+      user-select: none;
+      cursor: default;
+    }
+
+    .logo-section .logo-icon {
+      font-size: 1.8rem;
+      color: var(--highlight-orange);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        color: var(--highlight-orange);
+        transform: scale(1);
+      }
+      50% {
+        color: var(--deep-green);
+        transform: scale(1.1);
+      }
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 3rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links a {
+      position: relative;
+      color: var(--deep-green);
+      font-weight: 500;
+      font-size: 1rem;
+      text-decoration: none;
+      padding: 8px 0;
+      transition: color 0.3s;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-links a i {
+      font-size: 1.1rem;
+      width: 16px;
+      text-align: center;
+    }
+
+    .nav-links a:hover {
+      color: var(--highlight-orange);
+    }
+
+    .nav-links a:hover::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--highlight-orange);
+      border-radius: 2px;
+    }
+
+    .profile-dropdown {
+      position: relative;
+      user-select: none;
+    }
+
+    .profile-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+      color: var(--deep-green);
+      font-weight: 600;
+    }
+
+    .profile-btn:hover {
+      background: var(--soft-gray);
+    }
+
+    .profile-avatar {
+      width: 36px;
+      height: 36px;
+      background: var(--highlight-orange);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--peach);
+      font-weight: 700;
+      font-size: 16px;
+      user-select: none;
+    }
+
+    .dropdown-arrow {
+      width: 16px;
+      height: 16px;
+      fill: var(--deep-green);
+      transition: transform 0.3s;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 110%;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e2e8f0;
+      padding: 8px 0;
+      min-width: 160px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+      z-index: 1000;
+      user-select: none;
+    }
+
+    .dropdown-menu.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 10px 20px;
+      color: var(--deep-green);
+      text-decoration: none;
+      transition: background-color 0.2s;
+      font-weight: 500;
+      user-select: none;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: var(--soft-gray);
+      color: var(--highlight-orange);
+    }
+
+    main {
+      flex: 1;
+      padding: 3rem 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      color: var(--deep-green);
+    }
+
+    .welcome-section {
+      margin-bottom: 3rem;
+      text-align: center;
+      user-select: none;
+    }
+
+    .welcome-section h1 {
+      font-size: 3rem;
+      color: var(--peach);
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+      margin-bottom: 0.5rem;
+    }
+
+    .welcome-section .provider-name {
+      font-size: 1.5rem;
+      color: var(--peach);
+      font-weight: 600;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .report-section {
+      background: rgba(255 255 255 / 0.9);
+      border-radius: 18px;
+      padding: 2.5rem 3rem;
+      box-shadow: 0 12px 36px rgba(0 0 0 / 0.25);
+      border: 1px solid #e2e8f0;
+      max-width: 600px;
+      margin: 0 auto;
+      user-select: none;
+    }
+
+    .report-section h2 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: var(--deep-green);
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 1rem;
+      color: var(--black);
+      user-select: none;
+    }
+
+    input[type=text] {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type=text]:focus {
+      outline: none;
+      border-color: var(--highlight-orange);
+      box-shadow: 0 0 8px rgba(255 138 66 / 0.5);
+    }
+
+    button {
+      width: 100%;
+      background: var(--gradient);
+      color: var(--peach);
+      border: none;
+      padding: 16px 0;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.4s, box-shadow 0.3s, transform 0.3s;
+      user-select: none;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #143A2E 0%, #143A2E 100%);
+      box-shadow: 0 8px 30px rgba(255 138 66 / 0.6);
+      transform: translateY(-3px);
+    }
+
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .loading {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--peach);
+      font-weight: 600;
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255 255 255 / 0.6);
+      border-top-color: var(--peach);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .report-result {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      background: rgba(255 255 255 / 0.95);
+      border: 2px solid var(--highlight-orange);
+      border-radius: 12px;
+      color: var(--deep-green);
+      display: none;
+      user-select: text;
+      box-shadow: 0 8px 25px rgba(0 0 0 / 0.15);
+    }
+
+    .report-result.active {
+      display: block !important;
+    }
+
+    .report-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--soft-gray);
+    }
+
+    .report-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--deep-green);
+      margin-bottom: 0.5rem;
+    }
+
+    .report-subtitle {
+      color: var(--highlight-orange);
+      font-weight: 600;
+    }
+
+    .report-content {
+      text-align: left;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .report-section-title {
+      font-weight: 700;
+      color: var(--deep-green);
+      margin: 1rem 0 0.5rem 0;
+      font-size: 1.1rem;
+    }
+
+    .report-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: var(--soft-gray);
+      border-radius: 8px;
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .info-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--black);
+      margin-bottom: 0.25rem;
+    }
+
+    .info-value {
+      color: var(--deep-green);
+      font-weight: 500;
+    }
+
+    .download-btn {
+      background: var(--highlight-orange);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 1rem;
+    }
+
+    .download-btn:hover {
+      background: #e67c3a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255 138 66 / 0.4);
+    }
+
+    @media (max-width: 600px) {
+      .report-section {
+        padding: 2rem 1.5rem;
+        width: 100%;
+      }
+
+      .welcome-section h1 {
+        font-size: 2.2rem;
+      }
+
+      .welcome-section .provider-name {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <nav>
+      <div class="logo-section" aria-label="HealthBridge">
+        <i class="fas fa-heartbeat logo-icon"></i> HealthBridge
+      </div>
+
+      <ul class="nav-links" role="menubar">
+        <li role="none"><a href="landingPage.html" role="menuitem" tabindex="0"><i class="fas fa-home"></i> Home</a></li>
+        <li role="none"><a href="landingPage.html" role="menuitem" tabindex="0"><i class="fas fa-info-circle"></i> About</a></li>
+        
+        <li role="none"><a href="landingPage.html" role="menuitem" tabindex="0"><i class="fas fa-envelope"></i> Contact</a></li>
+      </ul>
+
+      <div class="profile-dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="profile-btn" aria-label="User menu" onclick="toggleDropdown()">
+          <div class="profile-avatar" aria-hidden="true">DR</div>
+          <svg class="dropdown-arrow" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M5 7l5 5 5-5" stroke="currentColor" stroke-width="2" fill="none" fill-rule="evenodd" />
+          </svg>
+        </button>
+        <div id="dropdownMenu" class="dropdown-menu" role="menu" aria-label="User profile menu">
+          <a href="#profile" role="menuitem" tabindex="0">Profile</a>
+          <a href="#logout" role="menuitem" tabindex="0" onclick="logout()">Logout</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main role="main" class="main">
+    <section class="welcome-section" aria-live="polite">
+      <h1>Welcome</h1>
+      <p class="provider-name" aria-atomic="true" aria-live="assertive">Dr. Sarah Johnson</p>
+    </section>
+
+    <section class="report-section" aria-label="Generate patient report">
+      <h2>Generate Patient Report</h2>
+      <form onsubmit="generateReport(event)" aria-describedby="reportInstructions">
+        <div id="reportInstructions" class="sr-only">
+          Enter patient's ID and FIPS to generate medical report.
+        </div>
+        
+        <div class="form-group">
+          <label for="patientId">Patient ID</label>
+          <input type="text" id="patientId" name="patientId" placeholder="e.g., PT-2024-001" required autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <label for="fisp">FIPS</label>
+          <input type="text" id="fisp" name="fisp" placeholder="e.g., FIPS-2024-001" required autocomplete="off" />
+        </div>
+
+        <button id="generateBtn" type="submit" aria-live="polite">
+          <span class="btn-text">Generate Report</span>
+          <div class="loading" id="loadingSpinner" aria-hidden="true">
+            <span class="spinner"></span>
+            <span>Generating...</span>
+          </div>
+        </button>
+      </form>
+      <div id="reportResult" class="report-result" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="report-header">
+          <div class="report-title">Medical Report</div>
+          <div class="report-subtitle">Comprehensive Patient Analysis</div>
+        </div>
+        
+        <div class="report-info" id="reportInfo">
+          <!-- Report info will be populated by JavaScript -->
+        </div>
+        
+        <div class="report-content">
+          <div class="report-section-title">Patient Summary</div>
+          <p>Patient presents with routine follow-up examination. Vital signs within normal limits. No acute distress observed during consultation.</p>
+          
+          <div class="report-section-title">Clinical Findings</div>
+          <p><strong>Blood Pressure:</strong> 120/80 mmHg<br>
+          <strong>Heart Rate:</strong> 72 bpm<br>
+          <strong>Temperature:</strong> 98.6°F (37°C)<br>
+          <strong>Respiratory Rate:</strong> 16 breaths/min</p>
+          
+          <div class="report-section-title">Assessment & Plan</div>
+          <p>Patient is in good health with no significant abnormalities noted. Continue current medication regimen. Follow-up appointment recommended in 6 months.</p>
+          
+          <div class="report-section-title">Recommendations</div>
+          <p>• Maintain regular exercise routine<br>
+          • Continue balanced diet<br>
+          • Monitor blood pressure at home<br>
+          • Return if any concerning symptoms develop</p>
+        </div>
+        
+        <button class="download-btn" onclick="downloadReport()">
+          <i class="fas fa-download"></i>
+          Download Report
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function toggleDropdown() {
+      const dropdown = document.getElementById('dropdownMenu');
+      const arrow = document.querySelector('.dropdown-arrow');
+      const isOpen = dropdown.classList.toggle('show');
+      arrow.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+      document.querySelector('.profile-dropdown').setAttribute('aria-expanded', isOpen);
+    }
+
+    document.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('dropdownMenu');
+      const profileBtn = document.querySelector('.profile-btn');
+      if (!profileBtn.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('show');
+        document.querySelector('.dropdown-arrow').style.transform = 'rotate(0deg)';
+        document.querySelector('.profile-dropdown').setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        alert('Logging out...');
+        // Implement actual logout here
+      }
+    }
+
+    function downloadReport() {
+      const reportInfo = document.getElementById('reportInfo');
+      const patientId = reportInfo.querySelector('.info-item:nth-child(1) .info-value').textContent;
+      const fisp = reportInfo.querySelector('.info-item:nth-child(2) .info-value').textContent;
+      const reportId = reportInfo.querySelector('.info-item:nth-child(3) .info-value').textContent;
+      const generatedAt = reportInfo.querySelector('.info-item:nth-child(4) .info-value').textContent;
+      const provider = reportInfo.querySelector('.info-item:nth-child(5) .info-value').textContent;
+
+      const reportContent = `
+MEDICAL REPORT
+==============
+
+Report Information:
+-------------------
+Patient ID: ${patientId}
+FISP: ${fisp}
+Report ID: ${reportId}
+Generated: ${generatedAt}
+Provider: ${provider}
+Status: Complete
+
+Patient Summary:
+----------------
+Patient presents with routine follow-up examination. Vital signs within normal limits. No acute distress observed during consultation.
+
+Clinical Findings:
+------------------
+Blood Pressure: 120/80 mmHg
+Heart Rate: 72 bpm
+Temperature: 98.6°F (37°C)
+Respiratory Rate: 16 breaths/min
+
+Assessment & Plan:
+------------------
+Patient is in good health with no significant abnormalities noted. Continue current medication regimen. Follow-up appointment recommended in 6 months.
+
+Recommendations:
+----------------
+• Maintain regular exercise routine
+• Continue balanced diet
+• Monitor blood pressure at home
+• Return if any concerning symptoms develop
+
+---
+Generated by HealthBridge Medical System
+Report Date: ${generatedAt}
+Provider: ${provider}
+      `.trim();
+
+      const blob = new Blob([reportContent], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Medical_Report_${patientId}_${reportId}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }
+
+    async function generateReport(event) {
+      event.preventDefault();
+      const patientIdInput = document.getElementById('patientId');
+      const fispInput = document.getElementById('fisp');
+      const patientId = patientIdInput.value.trim();
+      const fisp = fispInput.value.trim();
+      const generateBtn = document.getElementById('generateBtn');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      const btnText = generateBtn.querySelector('.btn-text');
+      const reportResult = document.getElementById('reportResult');
+      const reportDetails = reportResult.querySelector('.report-details');
+
+      if (!patientId || !fisp) {
+        alert('Please enter both Patient ID and FISP');
+        return;
+      }
+
+      btnText.style.display = 'none';
+      loadingSpinner.style.display = 'flex';
+      generateBtn.disabled = true;
+      reportResult.classList.remove('active');
+
+      try {
+        await new Promise(res => setTimeout(res, 2500)); // simulate network delay
+
+        const reportData = {
+          patientId,
+          fisp,
+          reportId: `RPT-${Date.now()}`,
+          generatedAt: new Date().toLocaleString(),
+          provider: 'Dr. Sarah Johnson'
+        };
+
+        const reportInfo = document.getElementById('reportInfo');
+        reportInfo.innerHTML = `
+          <div class="info-item">
+            <span class="info-label">Patient ID:</span>
+            <span class="info-value">${reportData.patientId}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">FISP:</span>
+            <span class="info-value">${reportData.fisp}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Report ID:</span>
+            <span class="info-value">${reportData.reportId}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Generated:</span>
+            <span class="info-value">${reportData.generatedAt}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Provider:</span>
+            <span class="info-value">${reportData.provider}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Status:</span>
+            <span class="info-value">Complete</span>
+          </div>
+        `;
+
+        reportResult.classList.add('active');
+
+        patientIdInput.value = '';
+        fispInput.value = '';
+      } catch {
+        alert('An error occurred generating the report.');
+      } finally {
+        btnText.style.display = 'inline';
+        loadingSpinner.style.display = 'none';
+        generateBtn.disabled = false;
+      }
+    }
+  </script>
+</body>
+
+</html>

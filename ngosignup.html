@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthBridge - NGO Registration</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --deep-green: #143A2E;
+      --peach: #FAD4C4;
+      --warm-white: #FFF7F0;
+      --soft-gray: #EDE6E1;
+      --highlight-orange: #FF8C42;
+      --black: #252525;
+      --gradient: linear-gradient(135deg, #143A2E 40%, #143A2E 95%);
+    }
+
+    *, *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--warm-white) 0%, #fcf0e4 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: var(--warm-white);
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+      padding: 0 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.75rem;
+      font-weight: 700;
+      user-select: none;
+      color: var(--deep-green);
+      cursor: default;
+    }
+
+    .logo .logo-icon {
+      font-size: 2rem;
+      color: var(--highlight-orange);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%,
+      100% {
+        color: var(--highlight-orange);
+        transform: scale(1);
+      }
+
+      50% {
+        color: var(--peach);
+        transform: scale(1.1);
+      }
+    }
+
+    nav a {
+      color: var(--deep-green);
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      white-space: nowrap;
+    }
+
+    nav a:hover {
+      background-color: var(--peach);
+      color: var(--highlight-orange);
+      box-shadow: 0 4px 10px var(--highlight-orange);
+    }
+
+    .main-container {
+      display: flex;
+      min-height: calc(100vh - 64px);
+      max-width: 1100px;
+      margin: 2rem auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      flex-wrap: wrap;
+    }
+
+    .left-panel {
+      flex: 1 1 40%;
+      background: var(--gradient);
+      color: var(--peach);
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 280px;
+    }
+
+    .left-panel h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      user-select: none;
+    }
+
+    .left-panel p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      font-weight: 300;
+      line-height: 1.5;
+      user-select: none;
+    }
+
+    .features {
+      list-style: none;
+      padding: 0;
+      user-select: none;
+    }
+
+    .features li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.1rem;
+      font-size: 1rem;
+    }
+
+    .features li::before {
+      content: '✔';
+      color: var(--peach);
+      background-color: rgba(255 255 255 / 0.3);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      user-select: none;
+    }
+
+    .right-panel {
+      flex: 1 1 60%;
+      min-width: 320px;
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background-color: var(--warm-white);
+    }
+
+    .right-panel .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      user-select: none;
+    }
+
+    .right-panel .header h2 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--deep-green);
+    }
+
+    .right-panel .header p {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #666;
+    }
+
+    form {
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--deep-green);
+      user-select: none;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 14px 12px;
+      margin-bottom: 20px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      font-weight: 500;
+      user-select: text;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--highlight-orange);
+      box-shadow: 0 0 8px rgba(255, 138, 66, 0.5);
+    }
+
+    .password-input {
+      position: relative;
+    }
+
+    .password-toggle {
+      position: absolute;
+      top: 50%;
+      right: 14px;
+      transform: translateY(-50%);
+      border: none;
+      background: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: #999;
+      user-select: none;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 500;
+      margin-bottom: 25px;
+      user-select: none;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 16px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      background: var(--gradient);
+      cursor: pointer;
+      transition: background 0.3s ease;
+      user-select: none;
+    }
+
+    button[type="submit"]:hover {
+      background-position: right center;
+      box-shadow: 0 8px 24px rgba(255, 138, 66, 0.6);
+      transform: translateY(-3px);
+    }
+
+    .login-link {
+      margin-top: 20px;
+      text-align: center;
+      font-weight: 500;
+      user-select: none;
+    }
+
+    .login-link a {
+      color: var(--highlight-orange);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 900px) {
+      .main-container {
+        flex-direction: column;
+        margin: 1rem;
+      }
+
+      .left-panel,
+      .right-panel {
+        min-width: 100%;
+        flex: none;
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .right-panel .header h2 {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo" aria-label="HealthBridge">
+                <i class="fas fa-heartbeat"></i> HealthBridge
+            </div>
+
+            <div class="nav">
+                <a href="landingPage.html"><i class="fas fa-home"></i><span>Home</span></a>
+                <a href="landingPage.html"><i class="fas fa-info-circle"></i><span>About</span></a>
+                <a href="landingPage.html"><i class="fas fa-cogs"></i><span>Solutions</span></a>
+                <a href="landingPage.html"><i class="fas fa-envelope"></i><span>Contact</span></a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <div class="left-panel">
+            <h1>Join HealthBridge</h1>
+            <p>Empower your NGO with tools designed to enhance social impact efficiently and securely.</p>
+            <ul class="features">
+                <li>Comprehensive program management</li>
+                <li>Secure data and communication</li>
+                <li>Analytics to track impact</li>
+                <li>Community collaboration features</li>
+            </ul>
+            <div class="divider"></div>
+            <div class="security-badge" aria-hidden="true">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Security Focused</h3>
+                <p>Robust encryption and privacy ensure your organization's data is always protected.</p>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="header">
+                <h2>NGO Registration</h2>
+                <p>Sign up to start managing your organization's programs and impact.</p>
+            </div>
+            <form id="ngoForm" novalidate>
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email address" required />
+                </div>
+
+                <div class="form-group password-input">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Create a secure password" required />
+                    <button type="button" class="password-toggle" aria-label="Toggle password visibility"
+                        onclick="togglePassword('password')">👁️</button>
+                </div>
+
+                <div class="form-group password-input">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password"
+                        required />
+                    <button type="button" class="password-toggle" aria-label="Toggle password visibility"
+                        onclick="togglePassword('confirmPassword')">👁️</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="designation">Designation</label>
+                    <select id="designation" name="designation" required>
+                        <option value="" disabled selected>Select your designation</option>
+                        <option value="program-manager">Program Manager</option>
+                        <option value="director">Director</option>
+                        <option value="volunteer">Volunteer</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="organization">Organization Name</label>
+                    <input type="text" id="organization" name="organization" placeholder="Enter your organization name"
+                        required />
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" name="terms" required />
+                    <label for="terms">I agree to the <a href="#terms">terms and conditions</a></label>
+                </div>
+
+                <button type="submit" id="submitBtn">Register</button>
+            </form>
+
+            <div class="login-link">
+                Already have an account? <a href="ngologin.html">Login here</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword(id) {
+            const field = document.getElementById(id);
+            if (field.type === "password") {
+                field.type = "text";
+            } else {
+                field.type = "password";
+            }
+        }
+
+        const ngoForm = document.getElementById('ngoForm');
+        ngoForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const fullName = ngoForm.fullName.value.trim();
+            const email = ngoForm.email.value.trim();
+            const password = ngoForm.password.value.trim();
+            const confirmPassword = ngoForm.confirmPassword.value.trim();
+            const designation = ngoForm.designation.value;
+            const organization = ngoForm.organization.value.trim();
+            const terms = ngoForm.terms.checked;
+
+            // Basic validation
+            if (!fullName || !email || !password || !confirmPassword || !designation || !organization || !terms) {
+                alert("Please fill out all fields and agree to the terms.");
+                return;
+            }
+
+            if (password.length < 8) {
+                alert("Password should be at least 8 characters.");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = "Registering...";
+            submitBtn.disabled = true;
+
+            // Simulate registration process
+            setTimeout(() => {
+                alert("Registration successful! Welcome to HealthBridge.");
+                ngoForm.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+    </script>
+</body>
+
+</html>

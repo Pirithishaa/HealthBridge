@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthBridge - Provider Registration</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --deep-green: #143A2E;
+      --peach: #FAD4C4;
+      --warm-white: #FFF7F0;
+      --soft-gray: #EDEBE6;
+      --highlight-orange: #FF8A42;
+    }
+
+    *, *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--warm-white) 0%, #fcf0e4 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: var(--deep-green);
+    }
+
+    header {
+      background: var(--warm-white);
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+      padding: 1rem 2rem;
+      user-select: none;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--deep-green);
+      user-select: none;
+      cursor: default;
+    }
+
+    .logo .logo-icon {
+      font-size: 1.8rem;
+      color: var(--highlight-orange);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%,
+      100% {
+        color: var(--highlight-orange);
+        transform: scale(1);
+      }
+
+      50% {
+        color: var(--deep-green);
+        transform: scale(1.1);
+      }
+    }
+
+    .nav a {
+      color: var(--deep-green);
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+
+    .nav a:hover {
+      background: var(--peach);
+      color: var(--highlight-orange);
+      box-shadow: 0 4px 10px var(--highlight-orange);
+    }
+
+    .main-container {
+      display: flex;
+      flex-wrap: wrap;
+      min-height: calc(100vh - 80px);
+      max-width: 1200px;
+      margin: 2rem auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .left-panel {
+      background: linear-gradient(to bottom right, #143A2E, #143A2E);
+      color: var(--peach);
+      padding: 3rem;
+      flex: 1 1 40%;
+      min-width: 280px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .left-panel h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      user-select: none;
+    }
+
+    .left-panel p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      font-weight: 300;
+      line-height: 1.6;
+      user-select: none;
+    }
+
+    .features {
+      list-style: none;
+      padding: 0;
+      user-select: none;
+    }
+
+    .features li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .features li::before {
+      content: '✓';
+      background: rgba(255 255 255 / 0.3);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      font-weight: 700;
+      user-select: none;
+    }
+
+    .right-panel {
+      flex: 1 1 60%;
+      min-width: 320px;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      user-select: none;
+    }
+
+    .right-panel h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--deep-green);
+      margin-bottom: 0.25rem;
+      text-align: center;
+    }
+
+    .right-panel p {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--deep-green);
+      user-select: none;
+    }
+
+    input[type=text],
+    input[type=email],
+    input[type=password],
+    select {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 1rem;
+      font-weight: 500;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      transition: border-color 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    input[type=text]:focus,
+    input[type=email]:focus,
+    input[type=password]:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--highlight-orange);
+      box-shadow: 0 0 8px var(--highlight-orange);
+    }
+
+    .password-input {
+      position: relative;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: var(--deep-green);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 25px;
+      user-select: none;
+    }
+
+    .checkbox-group label {
+      font-size: 0.9rem;
+      color: var(--deep-green);
+    }
+
+    .checkbox-group a {
+      color: var(--highlight-orange);
+      text-decoration: none;
+    }
+
+    .checkbox-group a:hover {
+      text-decoration: underline;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(90deg, #143A2E, #143A2E);
+      color: var(--peach);
+      border: none;
+      padding: 16px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.4s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      user-select: none;
+    }
+
+    .submit-btn:hover {
+      background: linear-gradient(90deg, #143A2E, #143A2E);
+      box-shadow: 0 6px 20px rgba(255 138 66 / 0.5);
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 900px) {
+      .main-container {
+        flex-direction: column;
+      }
+
+      .left-panel,
+      .right-panel {
+        min-width: 100%;
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .right-panel h2 {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <div class="logo" aria-label="HealthBridge">
+        <i class="fas fa-heartbeat logo-icon"></i> HealthBridge
+      </div>
+      <div class="nav" role="navigation">
+        <a href="landingPage.html" class="active"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="landingPage.html"><i class="fas fa-info-circle"></i><span>About</span></a>
+        <a href="landingPage.html"><i class="fas fa-cogs"></i>
+          <span>Solutions</span></a>
+        <a href="landingPage.html"><i class="fas fa-envelope"></i><span>Contact</span></a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="main-container" role="main">
+      <section class="left-panel" aria-label="Introduction and features">
+        <h1>Join HealthBridge</h1>
+        <p>Empower your healthcare career by joining our trusted provider network and leveraging innovative tools.</p>
+        <ul class="features" aria-label="Platform features">
+          <li>Streamlined patient management</li>
+          <li>Advanced data analytics</li>
+          <li>Secure and HIPAA compliant</li>
+          <li>Dedicated support team</li>
+        </ul>
+
+        <div class="divider" aria-hidden="true"></div>
+
+        <div class="security-badge" aria-hidden="true">
+          <i class="fas fa-shield-alt fa-2x"></i>
+          <h3>HIPAA Compliant Security</h3>
+          <p>Robust encryption safeguards patient data at all times.</p>
+        </div>
+      </section>
+
+      <section class="right-panel" aria-label="Provider registration form">
+        <div class="header" role="heading" aria-level="2">
+          <h2>Provider Registration</h2>
+          <p>Create your account to access our secure platform.</p>
+        </div>
+
+        <form id="providerForm" novalidate>
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" name="fullName" required autocomplete="name" />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required autocomplete="email" />
+          </div>
+
+          <div class="form-group password-input">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required minlength="8" />
+            <button type="button" class="password-toggle" aria-label="Toggle password visibility" onclick="togglePassword('password')">👁️</button>
+          </div>
+
+          <div class="form-group password-input">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required minlength="8" />
+            <button type="button" class="password-toggle" aria-label="Toggle password visibility" onclick="togglePassword('confirmPassword')">👁️</button>
+          </div>
+
+          <div class="form-group">
+            <label for="designation">Designation</label>
+            <select id="designation" name="designation" required>
+              <option value="" disabled selected>Select designation</option>
+              <option value="physician">Physician</option>
+              <option value="nurse">Nurse</option>
+              <option value="specialist">Specialist</option>
+              <option value="administrator">Administrator</option>
+              <option value="technician">Technician</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="organization">Organization/Hospital</label>
+            <input type="text" id="organization" name="organization" required autocomplete="organization" />
+          </div>
+
+          <div class="checkbox-group">
+            <input type="checkbox" id="terms" name="terms" required />
+            <label for="terms">I agree to the <a href="#terms" target="_blank">terms & conditions</a></label>
+          </div>
+
+          <button type="submit" class="submit-btn">Create Account</button>
+        </form>
+
+        <div class="login-link" role="contentinfo">
+             <center>Already have an account?
+          <a href="Provider Login.html" tabindex="0">Login here</a></center>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function togglePassword(id) {
+      const input = document.getElementById(id);
+      if (input.type === 'password') {
+        input.type = 'text';
+      } else {
+        input.type = 'password';
+      }
+    }
+
+    const form = document.getElementById('providerForm');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const fullName = form.fullName.value.trim();
+      const email = form.email.value.trim();
+      const password = form.password.value;
+      const confirmPassword = form.confirmPassword.value;
+      const designation = form.designation.value;
+      const organization = form.organization.value.trim();
+      const terms = form.terms.checked;
+
+      if (!fullName || !email || !password || !confirmPassword || !designation || !organization) {
+        alert('Please fill all required fields.');
+        return;
+      }
+
+      if (password.length < 8) {
+        alert('Password must be at least 8 characters.');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert('Passwords do not match.');
+        return;
+      }
+
+      if (!terms) {
+        alert('Please agree to the terms and conditions.');
+        return;
+      }
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Creating Account...';
+      submitBtn.disabled = true;
+
+      setTimeout(() => {
+        alert('Account created successfully. Welcome to HealthBridge!');
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+        form.reset();
+      }, 2000);
+    });
+
+    // Input focus animation
+    Array.from(document.querySelectorAll('input, select')).forEach(item => {
+      item.addEventListener('focus', () => {
+        item.parentElement.style.transform = 'translateY(-2px)';
+        item.parentElement.style.transition = 'transform 0.2s';
+      });
+      item.addEventListener('blur', () => {
+        item.parentElement.style.transform = 'translateY(0)';
+      });
+    });
+  </script>
+
+</body>
+
+</html>
