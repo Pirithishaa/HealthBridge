@@ -382,24 +382,23 @@
   <!-- JS -->
   <script>
     
-  // Handle dropdown toggle (Login / Signup)
+ 
   document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
     toggle.addEventListener('click', (e) => {
-      // Only block default when clicking on the toggle, not the links
+   
       if (e.target.tagName !== 'A') {
         e.preventDefault();
       }
       const parent = toggle.parentElement;
       parent.classList.toggle('open');
 
-      // Close all other dropdowns
       document.querySelectorAll('.dropdown').forEach(d => {
         if (d !== parent) d.classList.remove('open');
       });
     });
   });
 
-  // Close dropdowns when clicking outside
+
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.dropdown')) {
       document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
