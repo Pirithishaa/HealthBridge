@@ -1,4 +1,4 @@
-# train_model.py
+
 
 import pandas as pd
 import numpy as np
@@ -14,14 +14,11 @@ import joblib
 
 print("Starting model training process...")
 
-# --- Load Data ---
-# Use relative paths for portability
+
 df_full = pd.read_csv("final_data.csv")
 df_stack = pd.read_csv("Stackmodel_dataset.csv")
 
-# ==============================================================================
-# 1. TRAIN CLINICAL MODEL
-# ==============================================================================
+
 print("1. Training Clinical Model...")
 clinical_features = [
     "Age", "BMI", "BP_Systolic", "BP_Diastolic", "Cholesterol",
@@ -30,7 +27,7 @@ clinical_features = [
 ]
 df_clin = df_full[clinical_features].copy()
 
-# Simple rule-based risk category for training label
+
 def compute_risk_points(row):
     points = 0
     if row.get("Age", 0) >= 65: points += 2
@@ -57,9 +54,6 @@ clinical_clf = ImbPipeline(steps=[("preprocess", preprocessor_clin), ("smote", S
 clinical_clf.fit(X_clin, y_clin)
 print("   Clinical Model Trained.")
 
-# ==============================================================================
-# 2. TRAIN SOCIAL MODEL
-# ==============================================================================
 print("2. Training Social Model...")
 social_features_all = [
     "PovertyRate", "MedianFamilyIncome", "TractLOWI", "TractSNAP", "TractHUNV",
@@ -96,9 +90,7 @@ social_clf.fit(X_soc, y_soc)
 print("   Social Model Trained.")
 
 
-# ==============================================================================
-# 3. TRAIN META MODEL (STACKING)
-# ==============================================================================
+
 print("3. Training Meta Model...")
 y_meta = df_stack["Risk_Category"]
 X_train_c, X_test_c, y_train, y_test = train_test_split(df_stack[clinical_features], y_meta, stratify=y_meta, test_size=0.2, random_state=42)
@@ -116,9 +108,7 @@ meta_clf.fit(X_train_meta_df, y_train)
 print("   Meta Model Trained.")
 
 
-# ==============================================================================
-# 4. BUNDLE AND SAVE MODELS
-# ==============================================================================
+
 print("4. Bundling and saving models...")
 model_bundle = {
     "clinical_model": clinical_clf,
