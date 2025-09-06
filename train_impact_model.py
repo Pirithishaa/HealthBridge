@@ -14,21 +14,19 @@ def load_and_preprocess_data(file_path):
     if "Patient_ID" in data.columns:
         data = data.drop(columns=["Patient_ID"])
     
-    # --- Data Cleaning ---
-    # Convert target variable to numeric, coercing errors (e.g., strings) to NaN
+
     data['Overall_Risk_After'] = pd.to_numeric(data['Overall_Risk_After'], errors='coerce')
 
-    # Drop rows where the target is missing, as they cannot be used for training
+
     data.dropna(subset=['Overall_Risk_After'], inplace=True)
     
-    # --- Validation Check ---
-    # Check if the dataframe is empty after cleaning. If so, stop execution.
+
     if data.empty:
         print("\n❌ Error: The dataset is empty after cleaning. This can happen if 'Overall_Risk_After' contains no valid numbers.")
         print("Please check the 'intervention_impact_dataset.csv' file and ensure the target column is correctly formatted.")
-        return None, None # Return None to indicate failure
+        return None, None 
 
-    # Simple imputation for any missing feature values
+
     for col in data.columns:
         if data[col].isnull().any():
             if np.issubdtype(data[col].dtype, np.number):
@@ -44,8 +42,7 @@ def train_and_save_model(X, y):
     """Trains the model with hyperparameter tuning and saves it."""
     print("\n--- Starting Model Training ---")
     
-    # Stratify split to ensure target distribution is similar in train/test sets
-    # This requires binning the continuous target variable
+  
     bins = pd.qcut(y, q=5, labels=False, duplicates='drop')
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42, stratify=bins
@@ -56,7 +53,7 @@ def train_and_save_model(X, y):
         ('model', RandomForestRegressor(random_state=42))
     ])
     
-    # A smaller, faster grid for demonstration. You can expand this.
+
     param_grid = {
         "model__n_estimators": [100, 200],
         "model__max_depth": [10, 15],
@@ -74,7 +71,7 @@ def train_and_save_model(X, y):
     
     print(f"\nBest parameters found: {grid_search.best_params_}")
     
-    # --- Evaluate the final model ---
+  
     y_pred = best_model.predict(X_test)
     r2 = r2_score(y_test, y_pred)
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
@@ -83,19 +80,19 @@ def train_and_save_model(X, y):
     print(f"R² Score: {r2:.3f}")
     print(f"RMSE: {rmse:.2f}%")
     
-    # --- Save the trained model ---
+   
     joblib.dump(best_model, "intervention_model.joblib")
     print("\n✅ Model has been trained and saved to 'intervention_model.joblib'")
     
     return best_model
 
 if __name__ == "__main__":
-    # The dataset for this model should contain historical data of interventions and outcomes.
+   
     try:
-        # Ensure your dataset is named correctly.
+       
         X_train_data, y_train_data = load_and_preprocess_data("intervention_impact_dataset_updated.csv")
         
-        # Only proceed with training if the data is valid
+        
         if X_train_data is not None and y_train_data is not None:
             train_and_save_model(X_train_data, y_train_data)
 
