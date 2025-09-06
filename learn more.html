@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HealthBridge - Learn More</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        :root {
+            --deep-green: #14342A;
+            --peach: #FAD4C4;
+            --warm-white: #FFF7F0;
+            --soft-gray: #EDEBE6;
+            --highlight-orange: #FF8A42;
+            --black: #252525;
+            --gradient: linear-gradient(135deg, #14342A 40%, #FF8A42 95%);
+        }
+
+        *, *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--warm-white);
+            color: var(--deep-green);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            padding-bottom: 3rem;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: var(--deep-green);
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--peach);
+            box-shadow: 0 3px 20px rgba(20, 52, 42, 0.15);
+            user-select: none;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .logo {
+            cursor: default;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            gap: 0.4rem;
+        }
+
+        .logo i {
+            color: var(--highlight-orange);
+            font-size: 1.8rem;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                color: var(--highlight-orange);
+                transform: scale(1);
+            }
+
+            50% {
+                color: var(--peach);
+                transform: scale(1.1);
+            }
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--peach);
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background 0.3s ease, color 0.3s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+
+        nav a:hover,
+        nav a.active {
+            background-color: var(--soft-gray);
+            color: var(--highlight-orange);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--deep-green), var(--highlight-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: slideDown 1s ease forwards;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section {
+            background: var(--peach);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(20, 52, 42, 0.12);
+            margin-bottom: 3rem;
+            padding: 3rem;
+            color: var(--deep-green);
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--deep-green);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-content {
+            color: var(--deep-green);
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .section-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin: 2rem 0;
+        }
+
+        .feature-content h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--deep-green);
+            margin-bottom: 1rem;
+        }
+
+        .feature-content p {
+            color: var(--deep-green);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 1rem;
+            color: var(--deep-green);
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            color: var(--deep-green);
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            background: var(--highlight-orange);
+            color: var(--peach);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-weight: bold;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .feature-visual {
+            background: var(--gradient);
+            border-radius: 12px;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(20, 52, 42, 0.15);
+        }
+
+        .feature-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-visual:hover img {
+            transform: scale(1.05);
+        }
+
+        .bot-demo {
+            background: var(--gradient);
+            color: var(--peach);
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 3rem 0;
+            box-shadow: 0 12px 36px rgba(20, 52, 42, 0.15);
+        }
+
+        .bot-demo h3 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .chat-demo {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            color: var(--deep-green);
+            font-family: monospace;
+        }
+
+        .chat-message {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+            color: var(--deep-green);
+        }
+
+        .chat-message.bot {
+            background: var(--peach);
+            color: var(--deep-green);
+        }
+
+        .message-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .workflow-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .step-card {
+            background: var(--soft-gray);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .step-card:hover {
+            border-color: var(--highlight-orange);
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            background: var(--gradient);
+            color: var(--peach);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+        }
+
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--deep-green);
+            margin-bottom: 1rem;
+        }
+
+        .step-description {
+            color: var(--deep-green);
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, var(--warm-white), var(--peach));
+            border-left: 4px solid var(--highlight-orange);
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            color: var(--deep-green);
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 2rem;
+            }
+
+            .workflow-steps {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                gap: 1rem;
+            }
+
+            nav a {
+                padding: 4px 8px;
+                font-size: 0.9rem;
+            }
+
+            .feature-visual {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo"><i class="fas fa-heartbeat"></i>HealthBridge</div>
+        <nav class="nav">
+            <a href="landingPage.html" class="active"><i class="fas fa-home"></i><span>Home</span></a>
+            <a href="landingPage.html"><i class="fas fa-info-circle"></i><span>About</span></a>
+            <a href="landingPage.html"><i class="fas fa-cogs"></i>
+          <span>Services</span></a>
+            <a href="landingPage.html"><i class="fas fa-envelope"></i><span>Contact</span></a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="hero-section">
+                <h1 class="hero-title">How HealthBridge Works</h1>
+                <p class="hero-subtitle">Discover how our AI-powered platform connects healthcare providers with NGOs to
+                    deliver personalized patient care based on social determinants of health</p>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">AI-Powered Healthcare Assistant</h2>
+                <div class="feature-grid">
+                    <div class="feature-content">
+                        <h3>Intelligent Bot Support</h3>
+                        <p>Our advanced AI bot analyzes patient data and social determinants of health to provide
+                            healthcare providers with comprehensive insights and recommendations.</p>
+                        <ul class="feature-list">
+                            <li>Social determinants of health evaluation</li>
+                            <li>Personalized treatment recommendations</li>
+                            <li>Community resource identification</li>
+                            <li>Risk factor analysis and prevention strategies</li>
+                        </ul>
+                    </div>
+                    <div class="feature-visual">
+                        <img src="bot.jpg"
+                             alt="AI Robot and Healthcare Technology" 
+                             loading="lazy">
+                    </div>
+                </div>
+
+                <div class="bot-demo">
+                    <h3>AI Assistant in Action</h3>
+                    <div class="chat-demo">
+                        <div class="chat-message">
+                            <div class="message-label">Healthcare Provider:</div>
+                            "Patient shows signs of diabetes complications, living in food desert area."
+                        </div>
+                        <div class="chat-message bot">
+                            <div class="message-label">HealthBridge AI:</div>
+                            "Based on patient's location and social factors, I recommend connecting with local NGO
+                            'Community Health Partners' who provide nutrition education and food assistance. They have
+                            programs within 2 miles of patient's address."
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Social Determinants of Health Integration</h2>
+                <div class="section-content">
+                    <p>HealthBridge recognizes that health outcomes are heavily influenced by social, economic, and
+                        environmental factors. Our platform integrates these critical determinants into healthcare
+                        decision-making.</p>
+
+                    <div class="highlight-box">
+                        <h4>Key Social Determinants We Track</h4>
+                        <p>Housing stability, food security, transportation access, educational background, employment
+                            status, social support networks, neighborhood safety, and access to healthcare services.</p>
+                    </div>
+
+                    <div class="feature-grid">
+                        <div class="feature-content">
+                            <h3>Comprehensive Patient Profiles</h3>
+                            <p>Our system creates detailed patient profiles that go beyond medical history to include:</p>
+                            <ul class="feature-list">
+                                <li>Geographic and community context</li>
+                                <li>Socioeconomic background information</li>
+                                <li>Cultural and language preferences</li>
+                                <li>Available family and social support</li>
+                                <li>Community resources and barriers</li>
+                            </ul>
+                        </div>
+                        <div class="feature-visual">
+                            <img src="sdoh.jpg" 
+                                 alt="Healthcare Data Analytics Dashboard" 
+                                 loading="lazy">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">NGO Community Engagement</h2>
+                <div class="feature-grid">
+                    <div class="feature-visual">
+                        <img src="ngo.png" 
+                             alt="Community Healthcare Volunteers" 
+                             loading="lazy">
+                    </div>
+                    <div class="feature-content">
+                        <h3>Volunteer Network Activation</h3>
+                        <p>NGOs can register on HealthBridge to offer volunteer services and community support programs
+                            that address specific social determinants of health.</p>
+                        <ul class="feature-list">
+                            <li>Community health education programs</li>
+                            <li>Food and nutrition assistance</li>
+                            <li>Transportation support services</li>
+                            <li>Housing and social services navigation</li>
+                            <li>Mental health and wellness support</li>
+                            <li>Language interpretation and cultural mediation</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">The Impact of Integrated Care</h2>
+                <div class="section-content">
+                    <p>By connecting medical care with community support, HealthBridge enables a holistic approach to
+                        health that addresses root causes of health disparities.</p>
+
+                    <div class="feature-grid">
+                        <div class="feature-content">
+                            <h3>For Healthcare Providers</h3>
+                            <ul class="feature-list">
+                                <li>Better patient outcomes through comprehensive care</li>
+                                <li>Reduced readmission rates</li>
+                                <li>Access to community resources and partnerships</li>
+                                <li>Data-driven insights for population health</li>
+                            </ul>
+                        </div>
+                        <div class="feature-content">
+                            <h3>For NGOs and Communities</h3>
+                            <ul class="feature-list">
+                                <li>Direct connection to families in need</li>
+                                <li>Coordinated volunteer efforts</li>
+                                <li>Measurable community health impact</li>
+                                <li>Sustainable healthcare partnerships</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box">
+                        <h4>Real-World Example</h4>
+                        <p>A diabetic patient struggling with medication adherence due to food insecurity is connected through
+                            HealthBridge AI to a local NGO providing nutrition education and food assistance. The coordinated
+                            care approach addresses both medical management and underlying social factors, leading to improved
+                            health outcomes and reduced healthcare costs.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe sections for animation
+        document.querySelectorAll('.section, .step-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Animate chat messages
+        const chatDemo = document.querySelector('.chat-demo');
+        if (chatDemo) {
+            const messages = chatDemo.querySelectorAll('.chat-message');
+            messages.forEach((message, index) => {
+                message.style.opacity = '0';
+                message.style.transform = 'translateX(-20px)';
+                message.style.transition = `opacity 0.5s ease ${index * 0.5}s, transform 0.5s ease ${index * 0.5}s`;
+            });
+
+            const chatObserver = new IntersectionObserver(function (entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        messages.forEach(message => {
+                            message.style.opacity = '1';
+                            message.style.transform = 'translateX(0)';
+                        });
+                        chatObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.5
+            });
+
+            chatObserver.observe(chatDemo);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NGO Portal - Login | HealthBridge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        :root {
+            --deep-green: #143A2E;
+            --peach: #FAD4C4;
+            --warm-white: #FFF7F0;
+            --soft-gray: #EDE6E1;
+            --highlight-orange: #FF8A42;
+            --black: #252525;
+            --gradient: linear-gradient(135deg, #143A2E 40%, #143A2E 95%);
+        }
+
+        *, *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--warm-white) 0%, var(--peach) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: var(--warm-white);
+            box-shadow: 0 4px 15px rgba(20, 58, 34, 0.5);
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        .logo {
+            color: var(--deep-green);
+            font-weight: 700;
+            font-size: 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            user-select: none;
+            cursor: default;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--highlight-orange);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                color: var(--highlight-orange);
+                transform: scale(1);
+            }
+
+            50% {
+                color: var(--deep-green);
+                transform: scale(1.1);
+            }
+        }
+
+        .nav a {
+            color: var(--deep-green);
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .nav a:hover {
+            background: var(--peach);
+            color: var(--highlight-orange);
+            box-shadow: 0 4px 12px rgba(255, 138, 66, 0.5);
+        }
+
+        .main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1000px;
+            width: 100%;
+            background: var(--warm-white);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(20, 58, 34, 0.15);
+        }
+
+        .left-panel {
+            flex: 1;
+            background: var(--gradient);
+            color: var(--peach);
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-logo {
+            margin-bottom: 2.5rem;
+        }
+
+        .panel-logo-text {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            user-select: none;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            font-weight: 300;
+            letter-spacing: 0.6px;
+            user-select: none;
+        }
+
+        .left-content {
+            margin-top: 2rem;
+            flex-grow: 1;
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 400;
+            line-height: 1.6;
+            user-select: none;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.25);
+            margin: 2.5rem 0;
+            user-select: none;
+        }
+
+        .security-badge {
+            background: rgba(255, 255, 255, 0.12);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            user-select: none;
+            box-shadow: inset 0 0 15px rgba(255, 138, 66, 0.35);
+            margin-top: auto;
+        }
+
+        .security-badge i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--peach);
+        }
+
+        .security-badge h3 {
+            margin-bottom: 0.5rem;
+            color: var(--peach);
+            font-weight: 600;
+        }
+
+        .security-badge p {
+            font-size: 0.9rem;
+            color: var(--peach);
+        }
+
+        .right-panel {
+            flex: 1.4;
+            padding: 3rem 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: var(--warm-white);
+        }
+
+        .header-right {
+            text-align: center;
+            margin-bottom: 2rem;
+            user-select: none;
+        }
+
+        .header-right h1 {
+            color: var(--deep-green);
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-right p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--deep-green);
+            font-weight: 600;
+            font-size: 1rem;
+            user-select: none;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.85rem;
+            font-size: 1rem;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 1.2rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: var(--deep-green);
+            outline: none;
+            box-shadow: 0 0 6px var(--deep-green);
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--deep-green);
+            user-select: none;
+        }
+
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 500;
+        }
+
+        .options a {
+            color: var(--highlight-orange);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .options a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            width: 100%;
+            background: var(--gradient);
+            color: var(--peach);
+            border: none;
+            padding: 1rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.4s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #143A2E 100%, #143A2E 100%);
+        }
+
+        .error-message, .success-message {
+            display: none;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            text-align: center;
+            user-select: none;
+        }
+
+        .error-message {
+            background: #fce4e4;
+            color: #b00020;
+            border-left: 6px solid #b00020;
+        }
+
+        .success-message {
+            background: #e6f4ea;
+            color: #2e7d32;
+            border-left: 6px solid #2e7d32;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                max-width: 90vw;
+            }
+
+            .left-panel, .right-panel {
+                flex: unset;
+                width: 100%;
+            }
+
+            nav {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo"><i class="fas fa-hands-helping"></i> NGO Bridge</div>
+            <div class="nav">
+                <a href="landingPage.html"class="active"><i class="fas fa-home"></i><span>Home</span></a>
+                <a href="landingPage.html"><i class="fas fa-info-circle"></i><span>About</span></a>
+                <a href="landingPage.html"><i class="fas fa-cogs"></i>
+                  <span>Solutions</span></a>
+                <a href="landingPage.html"><i class="fas fa-envelope"></i><span>Contact</span></a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main">
+        <div class="container">
+            <div class="left-panel">
+                <div class="panel-logo">
+                    <div class="panel-logo-text">Secure NGO Access</div>
+                    <div class="tagline">Simplify your impact management</div>
+                </div>
+                <div class="left-content">
+                    Manage your operations, track beneficiaries and visualize your social impact — securely and remotely.
+                </div>
+                <div class="divider"></div>
+                <div class="security-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Data Secured</h3>
+                    <p>Encrypted and privacy-focused platform ensuring your organization's sensitive data remains safe.</p>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="header-right">
+                    <h1>NGO Login</h1>
+                    <p>Access your organization’s portal</p>
+                </div>
+                <form id="loginForm" novalidate>
+                    <div id="errorMsg" class="error-message">Invalid credentials, please try again.</div>
+                    <div id="successMsg" class="success-message">Login successful! Redirecting...</div>
+
+                    <label for="email">Organization ID or Email</label>
+                    <input type="text" id="email" name="email" placeholder="Example: NGO123 or admin@ngo.org" required />
+
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required />
+
+                    <div class="options">
+                        <label><input type="checkbox" id="rememberMe" name="rememberMe"> Remember me</label>
+                        <a href="#">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const errorMsg = document.getElementById('errorMsg');
+        const successMsg = document.getElementById('successMsg');
+        const loginBtn = document.getElementById('loginBtn');
+
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+
+            const email = this.email.value.trim();
+            const password = this.password.value.trim();
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const orgIdPattern = /^[A-Za-z0-9]{4,}$/;
+
+            if (!email || !password || !(emailPattern.test(email) || orgIdPattern.test(email)) || password.length < 8) {
+                errorMsg.textContent = 'Please enter valid credentials (Org ID or email and 8+ char password).';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            loginBtn.disabled = true;
+
+            // Simulate login process
+            setTimeout(() => {
+                loginBtn.innerHTML = '<i class="fas fa-check"></i> Success!';
+                successMsg.style.display = 'block';
+
+                setTimeout(() => {
+                    // Redirect to dashboard or reset form (for demo, reset)
+                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+                    loginBtn.disabled = false;
+                    successMsg.style.display = 'none';
+                    loginForm.reset();
+                }, 2000);
+            }, 1500);
+        });
+
+        // Real-time input styling
+        const emailInput = loginForm.email;
+        const passwordInput = loginForm.password;
+
+        emailInput.addEventListener('input', () => {
+            emailInput.style.borderColor = '';
+            errorMsg.style.display = 'none';
+        });
+
+        passwordInput.addEventListener('input', () => {
+            passwordInput.style.borderColor = '';
+            errorMsg.style.display = 'none';
+        });
+    </script>
+</body>
+
+</html>

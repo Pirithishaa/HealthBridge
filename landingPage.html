@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthBridge - Healthcare Solutions</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --deep-green: #1a3a32;
+      --peach: #FAD6C4;
+      --warm-white: #FFF7F0;
+      --soft-gray: #EDEBE6;
+      --highlight-orange: #FF8A42;
+      --neutral-black: #252525;
+      --gradient: linear-gradient(100deg, #1a3a32 70%, #2d5a4f 100%, #4a7c59 100%);
+      --background-white: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: var(--warm-white);
+      color: var(--deep-green);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+  
+    }
+
+    /* Header & Navigation */
+    header {
+      background: var(--background-white);
+      color: var(--deep-green);
+      box-shadow: 0 3px 24px rgba(20, 52, 42, 0.12);
+      animation: fadeDown 1s;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-40px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      cursor: default;
+    }
+
+    .logo-icon {
+      font-size: 30px;
+      color: var(--highlight-orange);
+      margin-right: 10px;
+      display: inline-block;
+      animation: pulseLogo 4s ease-in-out infinite;
+      transition: transform 0.3s ease;
+      line-height: 1;
+    }
+
+    @keyframes pulseLogo {
+      0%,
+      100% {
+        color: var(--highlight-orange);
+        transform: scale(1);
+      }
+
+      50% {
+        color: var(--deep-green);
+        transform: scale(1.1);
+      }
+    }
+
+    .logo-text {
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--peach);
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 7px;
+      text-decoration: none;
+      position: relative;
+      transition: background 0.3s, color 0.3s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 4px;
+      height: 3px;
+      background: var(--highlight-orange);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: var(--soft-gray);
+      color: var(--highlight-orange);
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      transform: scaleX(1);
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      left: 0;
+      top: 100%;
+      min-width: 210px;
+      background: var(--warm-white);
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(44, 44, 44, 0.08);
+      z-index: 10001;
+      padding: 4px 0;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 12px 16px;
+      color: var(--deep-green);
+      transition: background 0.3s, color 0.3s;
+      white-space: nowrap;
+    }
+
+    .dropdown-content a:hover {
+      background: var(--peach);
+      color: var(--highlight-orange);
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .mobile-btn-hidden {
+      display: none;
+    }
+
+    .mobile-btn-visible {
+      display: block;
+    }
+
+    /* Hero Section */
+    .hero {
+      background:
+        var(--gradient),
+        url('https://images.unsplash.com/photo-153293891079-1ba6ce.jpeg');
+      background-size: cover;
+      background-position: center;
+      color: var(--peach);
+      text-align: center;
+      padding: 100px 0 70px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 12px;
+    }
+
+    .hero-heading {
+      font-size: 52px;
+      font-weight: 700;
+      margin-bottom: 40px;
+      letter-spacing: -1.5px;
+      animation: slideUp 1.2s ease forwards;
+      line-height: 1.1;
+    }
+
+    .hero-subheading {
+      font-size: 22px;
+      margin-bottom: 50px;
+      opacity: 0.9;
+      animation: fadeIn 1.5s ease forwards 0.5s;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: var(--highlight-orange);
+      color: var(--deep-green);
+      border-radius: 8px;
+      padding: 16px 40px;
+      font-weight: 600;
+      font-size: 18px;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 1px;
+      box-shadow: 0 3px 8px rgba(255, 138, 66, 0.32);
+      position: relative;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s;
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    .btn:after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 100%;
+      transform: translate(-50%, -50%);
+      transition: width 0.5s, height 0.5s;
+      pointer-events: none;
+    }
+
+    .btn:hover {
+      background: var(--peach);
+      color: var(--deep-green);
+      box-shadow: 0 10px 20px rgba(255, 138, 66, 0.4);
+      transform: scale(1.05);
+    }
+
+    .btn:hover:after {
+      width: 200%;
+      height: 700%;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid white;
+      color: white;
+    }
+
+    .btn-outline:hover {
+      background: var(--gradient);
+      color: var(--peach);
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Section Titles */
+    .section-heading {
+      color: var(--deep-green);
+      font-size: 42px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    /* Features & Services */
+    .features,
+    .services {
+      padding: 80px 0;
+    }
+
+    .features {
+      background: white;
+    }
+
+    .services {
+      background: var(--soft-gray);
+    }
+
+    .features-grid{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 36px;
+    }
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* responsive */
+  gap: 36px;
+  justify-content: center; 
+  max-width: 900px;  
+  margin: 0 auto;    
+}
+
+
+
+    @media (max-width: 900px) {
+
+      .features-grid,
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .features-grid,
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Cards */
+    .feature-card,
+    .service-card {
+      background: var(--peach);
+      border-radius: 20px;
+      box-shadow: 0 10px 26px rgba(20, 52, 42, 0.12);
+      padding: 30px 24px;
+      text-align: left;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeSlideUp 1s ease forwards;
+      min-height: 320px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .feature-card:nth-child(1),
+    .service-card:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+
+    .feature-card:nth-child(2),
+    .service-card:nth-child(2) {
+      animation-delay: 0.4s;
+    }
+
+    .feature-card:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    @keyframes fadeSlideUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Icons */
+    .feature-icon,
+    .service-icon,
+    .service-card i {
+      font-size: 44px;
+      color: var(--deep-green);
+      margin-bottom: 20px;
+      animation: pulseIcon 2.5s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulseIcon {
+      0%,
+      100% {
+        filter: drop-shadow(0 0 6px rgba(255, 138, 66, 0.32));
+      }
+
+      50% {
+        filter: drop-shadow(0 0 18px rgba(255, 138, 66, 0.8));
+      }
+    }
+
+    .feature-title,
+    .service-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--highlight-orange);
+      margin-bottom: 20px;
+    }
+
+    .feature-description,
+    .service-description {
+      font-size: 16px;
+      color: #444;
+      line-height: 1.6;
+      margin-bottom: 1em;
+    }
+
+    /* Clean list styling for checkmarks */
+    .service-list {
+      list-style: none;
+      margin-top: 1em;
+      padding-left: 0;
+    }
+
+    .service-list li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 14px;
+      font-size: 16px;
+      color: var(--deep-green);
+    }
+
+    .service-list li i {
+      font-size: 20px;
+      margin-right: 12px;
+      min-width: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      background: white;
+      padding: 80px 0;
+    }
+
+    .testimonial-cards {
+      display: flex;
+      gap: 32px;
+      overflow-x: auto;
+      padding: 20px 0;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .testimonial-card {
+      background: var(--warm-white);
+      border-radius: 20px;
+      box-shadow: 0 10px 36px rgba(20, 52, 42, 0.12);
+      padding: 36px 28px;
+      min-width: 320px;
+      opacity: 0;
+      scroll-snap-align: center;
+      animation: fadeSlideUp 1s ease forwards;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 48px rgba(255, 138, 66, 0.32);
+      cursor: pointer;
+    }
+
+    .testimonial-card:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+
+    .testimonial-card:nth-child(2) {
+      animation-delay: 0.5s;
+    }
+
+    .testimonial-card:nth-child(3) {
+      animation-delay: 0.8s;
+    }
+
+    .testimonial-text {
+      font-style: italic;
+      font-size: 16px;
+      color: var(--deep-green);
+      line-height: 1.6;
+      margin-bottom: 28px;
+      flex-grow: 1;
+    }
+
+    .author {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: auto;
+    }
+
+    .author-avatar {
+      width: 52px;
+      height: 52px;
+      background: var(--highlight-orange);
+      color: var(--deep-green);
+      font-size: 20px;
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      flex-shrink: 0;
+      box-shadow: 0 0 12px var(--highlight-orange);
+      text-transform: uppercase;
+    }
+
+    .author-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .author-info .author-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--deep-green);
+    }
+
+    .author-info .author-role {
+      font-size: 14px;
+      color: #777;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* CTA Section */
+    .cta {
+      background: var(--deep-green);
+      color: var(--peach);
+      padding: 80px 0;
+      text-align: center;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .cta h2 {
+      font-size: 40px;
+      font-weight: 700;
+      margin-bottom: 30px;
+    }
+
+    .cta p {
+      max-width: 650px;
+      margin: 0 auto 40px;
+      font-size: 18px;
+      color: var(--peach);
+      opacity: 0.9;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid white;
+      color: white;
+      padding: 14px 44px;
+      font-weight: 600;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      background: var(--gradient);
+      color: var(--peach);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--neutral-black);
+      color: var(--peach);
+      padding: 48px 0 32px;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 36px;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-content h3 {
+      margin-bottom: 16px;
+      color: var(--highlight-orange);
+    }
+
+    .footer-content p,
+    .footer-content a {
+      font-size: 14px;
+      color: #ccc;
+      text-decoration: none;
+    }
+
+    .footer-content a:hover {
+      color: var(--highlight-orange);
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .social-icons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 138, 66, 0.15);
+      color: white;
+      transition: background-color 0.3s;
+    }
+
+    .social-icons a:hover {
+      background: rgba(255, 138, 66, 0.5);
+      color: black;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      border-top: 1px solid rgba(255, 138, 66, 0.32);
+      padding: 24px 0 0 0;
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    .footer-bottom .footer-website {
+      display: block;
+      margin-top: 8px;
+      color: rgba(255, 138, 66, 0.7);
+    }
+
+    /* Utility */
+    .animate {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+iframe {
+  background: transparent;
+  pointer-events: auto; /* allow clicks inside always */
+}
+
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <nav role="navigation" aria-label="Main Navigation">
+        <div class="logo" aria-label="Company Logo" role="banner">
+          <i class="fas fa-heartbeat logo-icon" aria-hidden="true"></i>
+          <div class="logo-text">HealthBridge</div>
+        </div>
+        <button class="mobile-btn-hidden" aria-label="Toggle Navigation Menu" type="button" aria-expanded="false"
+          aria-controls="primary-navigation">
+          <i class="fas fa-bars" aria-hidden="true"></i>
+        </button>
+        <div class="nav-links" id="primary-navigation">
+          <a href="#" class="active"><i class="fas fa-home"></i><span>Home</span></a>
+          <a href="#features"><i class="fas fa-info-circle"></i><span>About</span></a>
+          <a href="#services"><i class="fas fa-cogs"></i>
+          <span>Solutions</span></a>
+
+          <div class="dropdown" role="none">
+            <a href="#" role="button" aria-haspopup="true" aria-expanded="false" tabindex="0"> <i class="fas fa-user-plus"></i><span>Login</span>
+              <i class="fas fa-caret-down" aria-hidden="true"></i>
+            </a>
+            <div class="dropdown-content" role="menu" aria-label="Login submenu">
+              <a href="Provider Login.html?type=provider" role="menuitem" tabindex="0">Medical Providers</a>
+              <a href="ngologin.html?type=ngo" role="menuitem" tabindex="0">NGO</a>
+            </div>
+          </div>
+
+          <div class="dropdown" role="none">
+            <a href="#" role="button" aria-haspopup="true" aria-expanded="false" tabindex="0"><span>SignUp</span>
+              <i class="fas fa-caret-down" aria-hidden="true"></i>
+            </a>
+            <div class="dropdown-content" role="menu" aria-label="SignUp submenu">
+              <a href="providersignup.html" role="menuitem" tabindex="0">Medical Providers</a>
+              <a href="ngosignup.html" role="menuitem" tabindex="0">NGO</a>
+            </div>
+          </div>
+
+          <a href="#contact"><i class="fas fa-envelope"></i><span>Contact</span></a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" role="banner" aria-label="Main Banner">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-heading" tabindex="0">Transforming Healthcare Through Innovation</h1>
+        <p class="hero-subheading" tabindex="0">HealthBridge connects Medical providers and Non-Governmental
+          Organization with cutting-edge solutions that improve health outcomes and reduce costs.</p>
+        <div class="hero-buttons">
+          <a href="learn more.html" class="btn">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="features" role="region" aria-label="Services Provided">
+    <div class="container">
+      <h2 class="section-heading" tabindex="0">About Us</h2>
+      <div class="features-grid">
+        <article class="feature-card" tabindex="0" role="article" aria-labelledby="feature1-title">
+          <div class="feature-icon" aria-hidden="true"><i class="fas fa-user-md"></i></div>
+          <h3 id="feature1-title" class="feature-title">For Medical Providers</h3>
+          <p class="feature-description">Streamlined patient management, electronic health records, and clinical decision
+            support.</p>
+        </article>
+        <article class="feature-card" tabindex="0" role="article" aria-labelledby="feature2-title">
+          <div class="feature-icon" aria-hidden="true"><i class="fas fa-file-invoice-dollar"></i></div>
+          <h3 id="feature2-title" class="feature-title">For Non-Government Organization</h3>
+          <p class="feature-description">Claims processing, population health analytics, and cost management solutions.
+          </p>
+        </article>
+        <article class="feature-card" tabindex="0" role="article" aria-labelledby="feature3-title">
+          <div class="feature-icon" aria-hidden="true"><i class="fas fa-chart-line"></i></div>
+          <h3 id="feature3-title" class="feature-title">Advanced Analytics</h3>
+          <p class="feature-description">Comprehensive data analysis to drive better decisions and improve operational
+            efficiency.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="services" role="region" aria-label="More Wellness Services">
+    <div class="container">
+      <h2 class="section-heading" tabindex="0">We’re Providing Best Solutions</h2>
+      <div class="services-grid">
+        <article class="service-card" tabindex="0" role="article">
+          <div class="service-icon" aria-hidden="true"><i class="fas fa-heartbeat"></i></div>
+          <h3 class="service-title">Provider Solutions</h3>
+          <p class="service-description">Comprehensive tools designed specifically for healthcare providers to enhance patient care delivery.</p>
+          <ul class="service-list" aria-label="Cardiac Care Services">
+            <li><i class="fas fa-check"></i> Electronic Health Records</li>
+            <li><i class="fas fa-check"></i> Patient Management Systems</li>
+            <li><i class="fas fa-check"></i> Clinical Decision Support</li>
+          </ul>
+        </article>
+        <article class="service-card" tabindex="0" role="article">
+          <div class="service-icon" aria-hidden="true"><i class="fas fa-user-nurse"></i></div>
+          <h3 class="service-title">NGO Solutions</h3>
+          <p class="service-description">Addresses the social problems and community needs</p>
+          <ul class="service-list" aria-label="Outpatient Clinic Services">
+            <li><i class="fas fa-check"></i>Community Resource Navigation</li>
+            <li><i class="fas fa-check"></i>Personalized Support and Advocacy</li>
+            <li><i class="fas fa-check"></i>Health Equity and Education Programs</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials" role="region" aria-label="Patient Testimonials">
+    <div class="container">
+      <h2 class="section-heading" tabindex="0">What Our Clients Say</h2>
+      <div class="testimonial-cards">
+        <article class="testimonial-card" tabindex="0" role="article">
+          <p class="testimonial-text">"HealthBridge has transformed how we deliver care to our patients. The platform is intuitive and has significantly improved our workflow efficiency."</p>
+          <div class="author">
+            <div class="author-avatar">JD</div>
+            <div class="author-info">
+              <span class="author-name">Dr. Jennifer Davis</span>
+              <span class="author-role">Chief Medical Officer</span>
+            </div>
+          </div>
+        </article>
+        <article class="testimonial-card" tabindex="0" role="article">
+          <p class="testimonial-text">“The platform helps us coordinate volunteers, track program outcomes, and reach more families in need than ever before.”</p>
+          <div class="author">
+            <div class="author-avatar">MG</div>
+            <div class="author-info">
+              <span class="author-name">Ms.Micheal Grant</span>
+              <span class="author-role">Volunteer</span>
+            </div>
+          </div>
+        </article>
+        <article class="testimonial-card" tabindex="0" role="article">
+          <p class="testimonial-text">“The integration between our Medical provider and NGO has never been smoother. HealthBridge delivered exactly what we needed.”</p>
+          <div class="author">
+            <div class="author-avatar">AL</div>
+            <div class="author-info">
+              <span class="author-name">Dr.Anna Lee</span>
+              <span class="author-role">Health Director</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" role="region" aria-label="Call To Action">
+    <div class="container">
+      <h2 tabindex="0">Ready to Transform Healthcare?</h2>
+      <p tabindex="0" style="max-width:650px;margin:1em auto 2em auto;">
+        Join thousands of Medical Providers and NGO benefiting from HealthBridge's innovative solutions.
+      </p>
+      <a href="#" class="btn btn-outline" role="button">Get Started</a>
+    </div>
+  </section>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-content">
+        <section aria-label="Company Overview">
+          <h3>HealthBridge</h3>
+          <p>Connecting Medical providers and NGO through innovative technology to improve health outcomes.</p>
+          <div class="social-icons" role="list">
+            <a href="#" role="listitem"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" role="listitem"><i class="fab fa-twitter"></i></a>
+            <a href="#" role="listitem"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" role="listitem"><i class="fab fa-instagram"></i></a>
+          </div>
+        </section>
+        <section aria-label="Navigation Links">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="learn more.html">About</a></li>
+            <li><a href="#features">Solutions</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </section>
+        <section aria-label="Our Services">
+          <h3>Services</h3>
+          <ul>
+            <li><a href="#">Provider Solutions</a></li>
+            <li><a href="#">NGO Solutions</a></li>
+          </ul>
+        </section>
+        <section id = "contact" aria-label="Contact Information">
+          <h3>Contact</h3>
+          <address>
+            <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> 123 Healthcare Ave, Medical District, CA 94301</p>
+            <p><i class="fas fa-phone" aria-hidden="true"></i> (555) 123-4567</p>
+            <p><i class="fas fa-envelope" aria-hidden="true"></i> info@healthbridge.com</p>
+          </address>
+        </section>
+      </div>
+      <div class="footer-bottom" aria-label="Legal">
+        <p>© 2025 HealthBridge. All Rights Reserved.</p>
+        <p class="footer-website">www.healthbridge.com</p>
+      </div>
+    </div>
+  </footer>
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Animate sections on scroll
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.18 });
+
+      document.querySelectorAll('.feature-card, .service-card, .testimonial-card').forEach(el => {
+        observer.observe(el);
+      });
+
+      // Mobile menu toggle
+      const mobileBtn = document.querySelector('.mobile-btn-hidden');
+      const navLinks = document.querySelector('.nav-links');
+      if (mobileBtn) {
+        mobileBtn.addEventListener('click', () => {
+          navLinks.classList.toggle('nav-active');
+        });
+      }
+    });
+  </script>
+<div style="
+  position: fixed;
+  bottom: 10px;
+  right: 30px;
+  z-index: 9999;
+  border-radius: 20px;
+  overflow: hidden;
+  pointer-events: auto;
+">
+  <iframe src="Update.html"
+          style="
+            border: none;
+            width: 420px;
+            height: 600px;  /* ✅ chatbot size only */
+            border-radius: 20px;
+            pointer-events: auto;
+          ">
+  </iframe>
+</div>
+
+
+
+</body>
+
+</html>
