@@ -6,14 +6,12 @@ import logging
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from FINALMODEL import explain_and_generate_llm_report
-from database import AuthManager, db_manager  # make sure database.py exports AuthManager, db_manager
+from database import AuthManager, db_manager  
 from PyPDF2 import PdfReader
 import os
 from werkzeug.utils import secure_filename
 
-# ------------------------------
-# Config
-# ------------------------------
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -26,24 +24,19 @@ UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-# Initialize auth manager
 auth_manager = AuthManager(db_manager)
 
-# ------------------------------
-# Load Models & Data
-# ------------------------------
+
 try:
     patient_df = pd.read_csv("final_data.csv")
     intervention_model = joblib.load("intervention_model.joblib")
-    meta_model = joblib.load("meta_risk_model.joblib")   # <-- load meta model
+    meta_model = joblib.load("meta_risk_model.joblib")   
     logger.info("✅ Models and patient data loaded successfully")
 except Exception as e:
     logger.error(f"❌ Failed to load models or data: {e}")
     patient_df, intervention_model, meta_model = None, None, None
 
-# ------------------------------
-# Helpers
-# ------------------------------
+
 def login_required(f):
     from functools import wraps
     @wraps(f)
@@ -63,27 +56,21 @@ def get_current_user():
         }
     return None
 
-# ------------------------------
-# Protect NGO Dashboard
-# ------------------------------
+
 @app.before_request
 def restrict_ngo_dashboard():
     path = request.path or ""
     if path.startswith("/ngo/dashboard"):
         if session.get("user_type") != "ngo":
             return redirect(url_for("ngologin"))
-        # allow dash’s internal requests
         return None
 
-# ------------------------------
-# Routes
-# ------------------------------
+
 @app.route("/")
 @app.route("/landingPage.html")
 def landing_page():
     return render_template("landingPage.html")
 
-# ---------- NGO ----------
 @app.route("/ngo/login", methods=["GET", "POST"])
 def ngologin():
     if request.method == "POST":
@@ -102,7 +89,6 @@ def ngologin():
         return jsonify({"success": False, "message": message}), 401
     return render_template("ngologin.html")
 
-# ---------- Provider ----------
 @app.route("/provider/signup", methods=["GET", "POST"])
 def providersignup():
     if request.method == "POST":
@@ -119,7 +105,7 @@ def providersignup():
         )
         if success:
             session["provider"] = user
-            session["user_type"] = "provider"   # ✅ fix: mark user as provider
+            session["user_type"] = "provider"  
             return jsonify({"success": True, "redirect": "/provider"})
         return jsonify({"success": False, "message": message})
 
@@ -144,17 +130,14 @@ def provider():
             row = patient_df.loc[patient_df["Patient_ID"] == patient_id]
         if not row.empty:
             patient_data = row.iloc[0].to_dict()
-            # Predict with meta model
             if meta_model is not None:
                 try:
                     X = pd.DataFrame([patient_data])
                     risk_score = round(float(meta_model.predict_proba(X)[0][1]) * 100, 2)
                 except Exception as e:
                     logger.error(f"Meta model error: {e}")
-            # Generate explanation
             report = explain_and_generate_llm_report(patient_data, patient_data)
 
-            # ✅ Store results in session so they can be displayed on upload page too
             session["last_report"] = {
                 "patient_id": patient_id,
                 "fips": fips,
@@ -162,7 +145,6 @@ def provider():
                 "report": report
             }
 
-            # ✅ After generating, redirect to medical report upload page
             return redirect(url_for("provider_medicalreportuplload"))
 
     return render_template(
@@ -189,7 +171,6 @@ def generate_report():
             if not row.empty:
                 patient_data = row.iloc[0].to_dict()
 
-                # Predict with meta model
                 if meta_model is not None:
                     try:
                         X = pd.DataFrame([patient_data])
@@ -197,7 +178,6 @@ def generate_report():
                     except Exception as e:
                         logger.error(f"Meta model error: {e}")
 
-                # Generate explanation
                 report = explain_and_generate_llm_report(patient_data, patient_data)
 
                 return jsonify({
@@ -229,7 +209,6 @@ def download_pdf_report():
     doc.build(story)
     buffer.seek(0)
     return send_file(buffer, as_attachment=True, download_name=f"Report_{pid}.pdf")
-# --------------------
 @app.route("/ngo/signup", methods=["GET", "POST"])
 def ngosignup():
     if request.method == "POST":
@@ -243,14 +222,12 @@ def ngosignup():
         organization = data.get("organization")
         terms = data.get("terms")
 
-        # Backend validation
         if not all([full_name, email, password, confirm_password, designation, organization, terms]):
             return jsonify({"success": False, "message": "Please fill out all fields and agree to terms."}), 400
 
         if password != confirm_password:
             return jsonify({"success": False, "message": "Passwords do not match."}), 400
 
-        # Register NGO
         success, user, message = auth_manager.register_ngo(
             full_name=full_name,
             email=email,
@@ -267,7 +244,6 @@ def ngosignup():
                 "user_email": user["email"]
             })
 
-            # Optional: Load NGO dashboard
             try:
                 import ngo_dash
                 if hasattr(ngo_dash, "register_dash"):
@@ -279,7 +255,6 @@ def ngosignup():
 
         return jsonify({"success": False, "message": message}), 400
 
-    # GET request → render signup page
     return render_template("ngosignup.html")
 
 @app.route("/provider/login", methods=["GET", "POST"])
@@ -295,7 +270,7 @@ def provider_login():
                 "user_type": "provider",
                 "user_name": user["full_name"],
                 "user_email": user["email"],
-                "provider": user   # ✅ add this line
+                "provider": user  
             })
 
             return jsonify({"success": True, "message": message, "redirect": "/provider"})
@@ -308,15 +283,12 @@ def provider_login():
 def provider_dashboard():
     if session.get("user_type") != "provider":
         return redirect(url_for("landing_page"))
-    # ✅ always go to provider.html
     return render_template("provider.html", provider=get_current_user())
 
-# ---------- Chatbot ----------
 @app.route("/chatbot")
 def chatbot():
     return render_template("chatbot.html")
 
-# ---------- Report Upload / Interventions ----------
 @app.route('/medicalreportuplload.html')
 def medical_report_upload_page():
     return render_template('medicalreportuplload.html')
@@ -350,7 +322,6 @@ def analyze_report():
             provider=get_current_user()
         )
 
-    # Extract features from PDF
     intervention_features = {
         "blood_pressure": 1 if "blood pressure" in text.lower() else 0,
         "cholesterol": 1 if "cholesterol" in text.lower() else 0,
@@ -361,13 +332,10 @@ def analyze_report():
 
     if intervention_model is not None:
         try:
-            # Align features with training features
             X = X.reindex(columns=intervention_features, fill_value=0)
 
-            # ✅ Use regression prediction
             initial_risk = round(float(intervention_model.predict(X)[0]), 2)
 
-            # Example adjustment (you can change this logic as needed)
             predicted_risk_after = max(initial_risk - 20.0, 0)
             risk_reduction = round(initial_risk - predicted_risk_after, 2)
 
@@ -379,7 +347,6 @@ def analyze_report():
                 provider=get_current_user()
             )
     else:
-        # Fallback demo values if no model is loaded
         initial_risk, predicted_risk_after = 72.5, 45.0
         risk_reduction = 27.5
         interventions_found = ["Nutritional Support", "Follow-up Visits"]
@@ -394,17 +361,14 @@ def analyze_report():
     )
 
 
-# ---------- Logout ----------
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("landing_page"))
 
-# ------------------------------
-# Register NGO Dash app
-# ------------------------------
+
 try:
-    import ngo_dash  # ✅ matches file name
+    import ngo_dash  
     if hasattr(ngo_dash, "register_dash"):
         ngo_dash.register_dash(app)
     else:
@@ -412,8 +376,6 @@ try:
 except Exception as e:
     logger.warning(f"Could not import/register ngo_dashboard: {e}")
 
-# ------------------------------
-# Main
-# ------------------------------
+
 if __name__ == "__main__":
     app.run(debug=True)

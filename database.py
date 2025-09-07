@@ -4,7 +4,6 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 import logging
 
-# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -13,8 +12,8 @@ class DatabaseManager:
         self.connection = None
         self.config = {
             'host': 'localhost',
-            'user': 'root',  # Change this to your MySQL username
-            'password': 'Piri@2005',  # Change this to your MySQL password
+            'user': 'root',  
+            'password': 'Piri@2005',  
             'database': 'healthbridge',
             'charset': 'utf8mb4',
             'collation': 'utf8mb4_unicode_ci'
@@ -46,7 +45,6 @@ class DatabaseManager:
         cursor = self.connection.cursor(buffered=True)
         
         try:
-            # Create NGO users table
             ngo_table = """
             CREATE TABLE IF NOT EXISTS ngo_users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -61,7 +59,6 @@ class DatabaseManager:
             )
             """
             
-            # Create medical provider users table
             provider_table = """
             CREATE TABLE IF NOT EXISTS medical_providers (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -94,7 +91,6 @@ class DatabaseManager:
     def create_database(self):
         """Create the database if it doesn't exist"""
         try:
-            # Connect without specifying database
             temp_config = self.config.copy()
             del temp_config['database']
             
@@ -137,7 +133,7 @@ class AuthManager:
             
             user = cursor.fetchone()
             if user and user['is_active'] and check_password_hash(user['password_hash'], password):
-                del user['password_hash']  # don’t return sensitive info
+                del user['password_hash'] 
                 return True, user, "Login successful"
             else:
                 return False, None, "Invalid credentials"
@@ -163,7 +159,7 @@ class AuthManager:
             
             user = cursor.fetchone()
             if user and user["is_active"] and check_password_hash(user["password_hash"], password):
-                del user["password_hash"]  # remove sensitive field
+                del user["password_hash"]  
                 return True, user, "Login successful"
             else:
                 return False, None, "Invalid email or password"
@@ -181,17 +177,14 @@ class AuthManager:
         
         cursor = self.db.connection.cursor(buffered=True)
         try:
-            # Check if email or medical_id already exists
             cursor.execute("SELECT id FROM medical_providers WHERE email = %s OR medical_id = %s", (email, medical_id))
-            _ = cursor.fetchall()  # ✅ consume results
+            _ = cursor.fetchall() 
 
             if _:
                 return False, None, "Email or Medical ID already registered"
             
-            # Hash password
             password_hash = generate_password_hash(password)
             
-            # Insert new user
             cursor.execute("""
                 INSERT INTO medical_providers (full_name, email, medical_id, password_hash, specialization, hospital_name, license_number)
                 VALUES (%s, %s, %s, %s, %s, %s, %s)
@@ -199,7 +192,6 @@ class AuthManager:
             
             self.db.connection.commit()
 
-            # Build user object
             user = {
                 "id": cursor.lastrowid,
                 "full_name": full_name,
@@ -227,17 +219,16 @@ class AuthManager:
         
         cursor = self.db.connection.cursor(buffered=True)
         try:
-            # Check if email already exists
             cursor.execute("SELECT id FROM ngo_users WHERE email = %s", (email,))
-            _ = cursor.fetchall()  # ✅ consume results
+            _ = cursor.fetchall()  
 
             if _:
                 return False, None, "Email already registered"
             
-            # Hash password
+            
             password_hash = generate_password_hash(password)
             
-            # Insert new user
+            
             cursor.execute("""
                 INSERT INTO ngo_users (full_name, email, password_hash, designation, organization)
                 VALUES (%s, %s, %s, %s, %s)
@@ -263,6 +254,5 @@ class AuthManager:
             cursor.close()
 
 
-# Initialize database and auth managers
 db_manager = DatabaseManager()
 auth_manager = AuthManager(db_manager)
